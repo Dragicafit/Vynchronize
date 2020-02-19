@@ -81,58 +81,9 @@ socket.on('compareHost', function(data) {
     var hostState = data.state
 
     switch (currPlayer) {
-        case 0:
-            var currTime = player.getCurrentTime()
-            var state = playerStatus
-
-            // If out of sync
-            console.log("curr: " + currTime + " Host: " + hostTime)
-            if (currTime < hostTime - 2 || currTime > hostTime + 2) {
-                disconnected()
-            }
-
-            break;
-        case 1:
-            var currTime = dailyPlayer.currentTime
-            var state = dailyPlayer.paused;
-
-            // If out of sync
-            console.log("curr: " + currTime + " Host: " + hostTime)
-            if (currTime < hostTime - 2 || currTime > hostTime + 2) {
-                disconnected()
-            }
-
-            break;
-        case 2:
-            vimeoPlayer.getCurrentTime().then(function(seconds) {
-                // seconds = the current playback position
-                var currTime = seconds
-
-                // Need to nest async functions
-                vimeoPlayer.getPaused().then(function(paused) {
-                    // paused = whether or not the player is paused
-                    var state = paused
-
-                    // If out of sync
-                    console.log("curr: " + currTime + " Host: " + hostTime)
-                    if (currTime < hostTime - 2 || currTime > hostTime + 2) {
-                        disconnected()
-                    }
-
-                }).catch(function(error) {
-                    // an error occurred
-                    console.log("Error: Could not retrieve Vimeo Player state")
-                });
-
-            }).catch(function(error) {
-                // an error occurred
-                console.log("Error: Could not retrieve Vimeo player current time")
-            });
-
-            break;
-        case 3:
-            var currTime = media.currentTime
-            var state = media.paused
+        case 4:
+            var currTime = jwplayer().getPosition()
+            var state = jwplayer().getState() == 'pause'
 
             // If out of sync
             console.log("curr: " + currTime + " Host: " + hostTime)
