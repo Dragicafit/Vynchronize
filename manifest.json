@@ -1,0 +1,23 @@
+{
+
+  "description": "Sync wakanim videos",
+  "manifest_version": 2,
+  "name": "Wakanim With Friends",
+  "version": "1.0",
+  "homepage_url": "https://github.com/Dragicafit/WakanimWithFriends",
+
+  "permissions": [
+    "activeTab"
+  ],
+
+
+  "browser_action": {
+    "default_title": "Wakanim With Friends",
+    "default_popup": "index.html"
+  },
+
+  "web_accessible_resources": [
+    "js/*.js",
+    "js/*/*.js"
+  ]
+}
