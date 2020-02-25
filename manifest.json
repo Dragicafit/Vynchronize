@@ -16,6 +16,10 @@
     "default_popup": "index.html"
   },
 
+  "background": {
+    "scripts": ["js/background-script.js"]
+  },
+
   "web_accessible_resources": [
     "js/*.js",
     "js/*/*.js"
