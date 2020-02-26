@@ -1,33 +1,32 @@
 //-----------------------------------------------------------------------------
 // Host stuff
-var host = false
 var notifyfix = false
 
 // Sets the host for the room
-socket.on('setHost', function(data) {
+socket.on('setHost', function (data) {
     notifyfix = true
     console.log("You are the new host!")
     host = true
 });
 // Unsets the host
-socket.on('unSetHost', function(data) {
+socket.on('unSetHost', function (data) {
     console.log("Unsetting host")
     host = false
 });
 
 // This grabs data and calls sync FROM the host
-socket.on('getData', function(data) {
+socket.on('getData', function (data) {
     console.log("Hi im the host, you called?")
     socket.emit('sync host', {});
 });
 // Calls sync
-socket.on('syncHost', function(data) {
+socket.on('syncHost', function (data) {
     syncVideo(roomnum)
 });
 
 //Change the host
 function changeHost(roomnum) {
-    if (!host){
+    if (!host) {
         socket.emit('change host', {
             room: roomnum
         });
@@ -38,7 +37,7 @@ function changeHost(roomnum) {
     }
 }
 // Change the host label
-socket.on('changeHostLabel', function(data) {
+socket.on('changeHostLabel', function (data) {
     var user = data.username
     // Change label
     var hostlabel = document.getElementById('hostlabel')
@@ -53,7 +52,7 @@ socket.on('changeHostLabel', function(data) {
 })
 
 // When the host leaves, the server calls this function on the next socket
-socket.on('autoHost', function(data) {
+socket.on('autoHost', function (data) {
     changeHost(data.roomnum)
 })
 
@@ -75,7 +74,7 @@ function getHostData(roomnum) {
 }
 
 // Uses the host data to compare
-socket.on('compareHost', function(data) {
+socket.on('compareHost', function (data) {
     // The host data
     var hostTime = data.currTime
     var hostState = data.state
@@ -104,12 +103,12 @@ socket.on('compareHost', function(data) {
 
             break;
         case 2:
-            vimeoPlayer.getCurrentTime().then(function(seconds) {
+            vimeoPlayer.getCurrentTime().then(function (seconds) {
                 // seconds = the current playback position
                 var currTime = seconds
 
                 // Need to nest async functions
-                vimeoPlayer.getPaused().then(function(paused) {
+                vimeoPlayer.getPaused().then(function (paused) {
                     // paused = whether or not the player is paused
                     var state = paused
 
@@ -119,12 +118,12 @@ socket.on('compareHost', function(data) {
                         disconnected()
                     }
 
-                }).catch(function(error) {
+                }).catch(function (error) {
                     // an error occurred
                     console.log("Error: Could not retrieve Vimeo Player state")
                 });
 
-            }).catch(function(error) {
+            }).catch(function (error) {
                 // an error occurred
                 console.log("Error: Could not retrieve Vimeo player current time")
             });
@@ -153,7 +152,7 @@ function test() {
 
 // DEPRECATED DOES NOT WORK PROPERLY
 // Set controls on api to the host, remove controls on other sockets
-socket.on('hostControls', function(data) {
+socket.on('hostControls', function (data) {
     // If host disable controls
     if (!host) {
         console.log("SOURCE: " + document.getElementById('player').src)
@@ -168,4 +167,5 @@ socket.on('hostControls', function(data) {
     }
 });
 
+undefined;
 //-----------------------------------------------------------------------------

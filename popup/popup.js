@@ -4,64 +4,124 @@ var username = ""
 // Don't allow trailing or leading whitespace!
 var nosymbols = new RegExp("^(([a-zA-Z0-9_-][a-zA-Z0-9 _-]*[a-zA-Z0-9_-])|([a-zA-Z0-9_-]*))$");
 
-// Remove the video from the queue at idx
-function removeAt(idx) {
-    browser.tabs.sendMessage(browser.tabs.query({
-        currentWindow: true,
-        active: true
-      })[0].id,
-    {
-        command: 'remove at',
-        idx: idx
-    })
+// Chat stuff
+function chat() {
+    $(function () {
+        var $roomArea = $('#roomArea');
+        var $userFormArea = $('#userFormArea');
+        var $userForm = $('#userForm');
+        var $username = $('#username');
+        var $roomnum = $('#roomnum');
+
+
+        // Submit user form
+        $userForm.submit(function (e) {
+            e.preventDefault();
+            // console.log("Submitted");
+            // New User
+
+            // Get rid of trailing/leading whitespace
+            // var roomnum_val = $roomnum.val().trim();
+
+            // If name not entered
+            if ($username.val() == "") {
+                console.log("ENTER A NAME")
+                var noname = document.getElementById('missinginfo')
+                noname.innerHTML = "Surely you have a name right? Enter it below!"
+            }
+            // If name is too long
+            else if ($username.val().length > 30) {
+                console.log("NAME IS TOO LONG")
+                var noname = document.getElementById('missinginfo')
+                noname.innerHTML = "Your name can't possibly be over 30 characters!"
+            }
+            // If roomnate
+            else if ($roomnum.val().length > 50) {
+                console.log("ROOM NAME IS TOO LONG")
+                var noname = document.getElementById('missinginfo')
+                noname.innerHTML = "How are you going to remember a room code that has more than 50 characters?"
+            }
+            // If Room contains symbols
+            // Can only be reached if the user decided to be sneaky and paste them!
+            else if (!nosymbols.test($roomnum.val())) {
+                console.log("ENTER A PROPER ROOMNUMBER")
+                var noname = document.getElementById('missinginfo')
+                noname.innerHTML = ""
+                var noname2 = document.getElementById('missinginfo2')
+                noname2.innerHTML = "Please enter a room ID without symbols or leading/trailing whitespace!"
+            } else {
+                username = $username.val()
+                browser.tabs.query({
+                    currentWindow: true,
+                    active: true
+                }).then(tabs => {
+                    browser.tabs.sendMessage(tabs[0].id,
+                        {
+                            command: 'new user',
+                            username: $username.val(),
+                            roomnum: $roomnum.val()
+                        }).then(_ => {
+                            $userFormArea.hide();
+                            $roomArea.show();
+
+                            // No longer using initarea
+                            // var initStuff = document.getElementById("initArea")
+                            // initStuff.innerHTML = ""
+
+                            // This sets the room number on the client
+                            if ($roomnum.val() != "") {
+                                roomnum = $roomnum.val()
+                            }
+
+                            // Sets the invite link (roomnum)
+                            // document.getElementById('invite').innerHTML = "vynchronize.herokuapp.com/" + roomnum
+                            document.getElementById("inv_input").value = "vynchronize.herokuapp.com/" + roomnum
+                            history.pushState('', 'Vynchronize', roomnum);
+                        });
+                }).catch(reportError);
+
+                // Join room
+                browser.tabs.query({
+                    currentWindow: true,
+                    active: true
+                }).then(tabs => {
+                    browser.tabs.sendMessage(tabs[0].id,
+                        {
+                            command: 'new room',
+                            roomnum: $roomnum.val()
+                        });
+                }).catch(reportError);
+
+                $username.val('');
+            }
+        });
+
+
+        // Prevent special characters from being typed
+        $('#roomnum').on('keypress', function (event) {
+            var nosymbols = new RegExp("^[a-zA-Z0-9\s]+$");
+            var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+            console.log(key)
+            console.log(event.keyCode)
+            // Allow enters and spaces to be used still
+            if ($roomnum.val().length > 50 || !nosymbols.test(key) && event.keyCode != 13 && event.keyCode != 32 && event.keyCode != 45 && event.keyCode != 95) {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        // Prevent special characters from being typed
+        $('#username').on('keypress', function (event) {
+            var nosymbols = new RegExp("^[a-zA-Z0-9\s]+$");
+            var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+            // Allow enters and spaces to be used still
+            if ($username.val().length > 30 || !nosymbols.test(key) && event.keyCode != 13 && event.keyCode != 32 && event.keyCode != 45 && event.keyCode != 95) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
 }
-
-function playAt(idx) {
-    browser.tabs.sendMessage(browser.tabs.query({
-        currentWindow: true,
-        active: true
-      })[0].id,
-    {
-        command: 'play at',
-        idx: idx
-    }).then(data => {
-        var videoId = data.videoId
-
-        // Change the video
-        rowser.tabs.sendMessage(browser.tabs.query({
-            currentWindow: true,
-            active: true
-          })[0].id,
-        {
-            command:'change video',
-            room: roomnum,
-            videoId: videoId,
-            time: 0
-        })
-    })
-}
-
-// set id
-browser.runtime.onMessage.addListener((data, sender) => {
-    // Ensure no valid id too
-    if (data.command != 'set id')
-        return
-    if (data.id != "" && nosymbols.test(data.id)) {
-        document.getElementById('roomnum').value = data.id
-        // Probably should not force it to be readonly
-        // document.getElementById('roomnum').readOnly = true
-        console.log("You are joining room: " + data.id)
-    }
-    // Reset url for next person
-    // Workaround
-    browser.tabs.sendMessage(browser.tabs.query({
-        currentWindow: true,
-        active: true
-      })[0].id,
-      {
-          command: 'reset url'
-      })
-});
 
 function copyInvite() {
     /* Get the text field */
@@ -87,30 +147,31 @@ function randomroom() {
     document.getElementById('roomnum').value = Math.random().toString(36).substr(2, 12)
 }
 
+/**
+ * Just log the error to the console.
+ */
+function reportError(error) {
+    console.error(`Could not beastify: ${error}`);
+}
 
-browser.tabs.query({ url: 'http://localhost/*', visible: true, active: true }).executeScript({
+browser.tabs.executeScript({
     // Bootstrap core JavaScript
     file: "/js/dependencies/jquery.min.js",
-    file: "/js/dependencies/bootstrap.bundle.min.js",
-    file: "/js/dependencies/scrolling-nav.js",
-    file: "/js/dependencies/bootstrap-notify.min.js",
-    // Plugin JavaScript
-    file: "/js/dependencies/jquery.easing.min.js",
-    // My JS files
-    file: "/js/sync.js",
-    file: "/js/player.js",
-    file: "/js/host.js",
-    file: "/js/events.js",
-    file: "/js/notify.js",
-    // Youtube
-    file: "js/yt.js",
-    // Daily Motion
-    file: "https://api.dmcdn.net/all.js",
-    file: "js/dm.js",
-    // Vimeo
-    file: "https://player.vimeo.com/api/player.js",
-    file: "js/vimeo.js",
-    // HTML5 Player
-    file: "js/html5.js"
-
 })
+    .then(_ => browser.tabs.executeScript({ file: "/js/dependencies/socket.io.js" }))
+    .then(_ => browser.tabs.executeScript({ file: "/js/dependencies/bootstrap.bundle.min.js" }))
+    .then(_ => browser.tabs.executeScript({ file: "/js/dependencies/scrolling-nav.js" }))
+    .then(_ => browser.tabs.executeScript({ file: "/js/dependencies/bootstrap-notify.min.js" }))
+    .then(_ => browser.tabs.executeScript({ file: "/js/dependencies/jquery.easing.min.js" }))
+    .then(_ => browser.tabs.executeScript({ code: "var socket = io.connect(\"http://localhost:3000/\");" }))
+    .then(_ => browser.tabs.executeScript({ code: "var host = false;" }))
+    .then(_ => browser.tabs.executeScript({ file: "/js/background-script.js" }))
+    .then(_ => browser.tabs.executeScript({ file: "/js/sync.js" }))
+    .then(_ => browser.tabs.executeScript({ file: "/js/player.js" }))
+    .then(_ => browser.tabs.executeScript({ file: "/js/host.js" }))
+    .then(_ => browser.tabs.executeScript({ file: "/js/events.js" }))
+    .then(_ => browser.tabs.executeScript({ file: "/js/notify.js" }))
+    .then(_ => browser.tabs.executeScript({ file: "/js/dm.js" }))
+    .then(_ => browser.tabs.executeScript({ file: "/js/html5.js" }))
+    .then(chat)
+    .catch(reportError);
