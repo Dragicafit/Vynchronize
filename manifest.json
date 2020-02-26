@@ -7,20 +7,21 @@
   "homepage_url": "https://github.com/Dragicafit/WakanimWithFriends",
 
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "tabs"
   ],
 
 
   "browser_action": {
     "default_title": "Wakanim With Friends",
-    "default_popup": "index.html"
+    "default_popup": "popup/index.html"
   },
 
   "web_accessible_resources": [
     "*",
     "*/*",
     "*/*/*",
-    "js/*",
-    "js/*/*"
+    "*/*/*/*",
+    "*/*/*/*/*"
   ]
 }

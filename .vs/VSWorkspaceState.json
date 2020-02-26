@@ -4,10 +4,10 @@
     "\\app",
     "\\app\\utils",
     "\\assets",
-    "\\css",
     "\\js",
+    "\\js\\dependencies",
     "\\popup"
   ],
-  "SelectedNode": "\\index.html",
+  "SelectedNode": "\\popup\\index.html",
   "PreviewInSolutionExplorer": false
 }
