@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/small-business.css" rel="stylesheet">
+
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/mobile-style.css" rel="stylesheet">
+    <link href="css/html5player.css" rel="stylesheet">
+    <!-- jquery -->
+    <script src="../js/dependencies/jquery.min.js"></script>
+</head>
+
+<body class="bg-light" id="Home">
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- User Form (First Page) -->
+        <div id="userFormArea" class="row">
+            <div class="col-md-12">
+                <h2> Join a Room! </h2>
+                <form id="userForm">
+                    <div class="form-group">
+                        <p style="color:red; margin-bottom: 0px" id="missinginfo"></p>
+                        <label>Enter Name</label>
+                        <input class="form-control" id="username" />
+                        <br />
+                        <p style="color:red; margin-bottom: 0px" id="missinginfo2"></p>
+                        <label>Enter Room ID (Default 1)</label>
+                        <button type="button" onClick="randomroom()" class="btn btn-primary random">Random</button>
+                        <br />
+                        <input class="form-control" id="roomnum" />
+                        <br />
+
+                        <input style="margin-top: 10px;" type="submit" class="btn btn-primary" value="Enter" />
+                        <hr style="height:65pt; visibility:hidden;" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="roomArea">
+            <!-- Heading Row -->
+            <div class="row my-4" style="margin-top: 0px !important;">
+                <div class="col-lg-7">
+                    <!-- INVITE MOVED TO MODAL -->
+                    <!-- <p id="invite">Invite a friend! Send them the link: vynchronize.herokuapp.com/ROOMNUM</p> -->
+                    <h2><span id="hostlabel" class="label label-default"><i class="fas fa-user"></i> Current Host: Kyle </span></h2>
+                    <div>
+                        <button id="playButton" onclick="playVideo()" style="margin-top:.5rem" class="btn btn-primary"><i class="fa fa-play"></i> Play / <i class="fa fa-pause"></i> Pause</button>
+
+                        <button id="syncbutton" onclick="syncVideo();syncAlert()" style="margin-top:.5rem" class="btn btn-primary"><i class="fa fa-sync"></i> Sync</button>
+
+                        <button id="hostbutton" onclick="changeHost()" style="margin-top:.5rem" class="btn btn-primary"><i class="fas fa-users"></i> Make me the host!</button>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <h5 class="right-header">Online Users</h5>
+                    <hr style="height:0pt; visibility:hidden;" />
+
+                    <div class="col-md-13">
+                        <div class="well online-users noscrollbar">
+                            <ul class="list-group" id="users"></ul>
+                        </div>
+
+                        <!-- Trigger the modal with a button -->
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Invite a Friend</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Send a friend your unique room link so they can watch videos too!</p>
+                                    <input class="inv_input" id="inv_input" type="text" value="vynchronize.herokuapp.com/ROOMNUM" class="field left" readonly>
+                                </div>
+                                <div class="modal-footer">
+                                    <div style="opacity: 1" class="tooltip">
+                                        <button type="button" class="btn btn-default" onclick="copyInvite()" onmouseout="outFunc()"><span class="tooltiptext" id="myTooltip">Copy to clipboard</span><i class="fas fa-clipboard"></i> Copy to Clipboard</button>
+                                    </div>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

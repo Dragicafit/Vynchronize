@@ -296,3 +296,5 @@ socket.on('changeTime', function (data) {
     var time = data.time
     jwplayer().seek(time);
 });
+
+undefined;
