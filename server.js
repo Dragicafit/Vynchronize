@@ -315,8 +315,7 @@ io.sockets.on('connection', function (socket) {
             // var videoId = io.sockets.adapter.rooms['room-'+roomnum].currVideo
             io.sockets.in("room-" + roomnum).emit('syncVideoClient', {
                 time: currTime,
-                state: state,
-                playerId: playerId
+                state: state
             })
         }
     });
@@ -365,7 +364,7 @@ io.sockets.on('connection', function (socket) {
             })
         }
     })
-
+    /*
     // Change video
     socket.on('change video', function (data, callback) {
         if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
@@ -475,7 +474,7 @@ io.sockets.on('connection', function (socket) {
             socket.broadcast.to(host).emit('getData')
         }
     })
-
+    */
 
     // Send Message in chat
     socket.on('send message', function (data) {

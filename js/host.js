@@ -37,6 +37,7 @@ function changeHost(roomnum) {
         })
     }
 }
+/*
 // Change the host label
 socket.on('changeHostLabel', function (data) {
     var user = data.username
@@ -51,7 +52,7 @@ socket.on('changeHostLabel', function (data) {
     //     user: user
     // })
 })
-
+*/
 // When the host leaves, the server calls this function on the next socket
 socket.on('autoHost', function (data) {
     changeHost(data.roomnum)
