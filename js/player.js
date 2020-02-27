@@ -1,28 +1,18 @@
-var currPlayer = 4
-
-// 4 - Jwplayer
-
 // Gets all the player data
-socket.on('getPlayerData', function(data) {
+socket.on('getPlayerData', function (data) {
     var roomnum = data.room
     var caller = data.caller
 
-    switch (currPlayer) {
-        case 4:
-            var currTime = jwplayer().getPosition()
-            var state = jwplayer().getState() == 'paused'
-            socket.emit('get host data', {
-                room: roomnum,
-                currTime: currTime,
-                state: state,
-                caller: caller
-            });
-            break;
-        default:
-            console.log("Error invalid player id")
-    }
+    var currTime = jwplayer().getPosition()
+    var state = jwplayer().getState() == 'paused'
+    socket.emit('get host data', {
+        room: roomnum,
+        currTime: currTime,
+        state: state,
+        caller: caller
+    });
 });
-
+/*
 // Create jwplayer Player
 socket.on('createJwplayer', function (data) {
     if (currPlayer != 4) {
@@ -46,3 +36,4 @@ socket.on('createJwplayer', function (data) {
         betaAlert()
     }
 });
+*/

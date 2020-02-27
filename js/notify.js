@@ -4,7 +4,7 @@
 // 3. Beta Message
 
 // Enqueue Notify (0)
-socket.on('enqueueNotify', function(data) {
+socket.on('enqueueNotify', function (data) {
     console.log("Enqueue Notify Alert")
     var title = data.title
     var user = data.user
@@ -31,7 +31,7 @@ socket.on('enqueueNotify', function(data) {
 })
 
 // Change Host (1)
-socket.on('changeHostNotify', function(data) {
+socket.on('changeHostNotify', function (data) {
     console.log("Host Change Notify Alert")
     var user = data.user
 
@@ -57,7 +57,7 @@ socket.on('changeHostNotify', function(data) {
 })
 
 // Empty Queue (2)
-socket.on('emptyQueueNotify', function(data) {
+socket.on('emptyQueueNotify', function (data) {
     console.log("Empty Queue Notify Alert")
     var user = data.user
 
@@ -83,7 +83,7 @@ socket.on('emptyQueueNotify', function(data) {
 })
 
 // Beta Message (3)
-socket.on('betaNotify', function(data) {
+socket.on('betaNotify', function (data) {
     console.log("Beta Notify Alert")
 
     $.notify({

@@ -6,26 +6,24 @@ var socket = require('../../server').socket
 
 module.exports = {
 
-        // Update all users
-        // function updateUsernames() {
-        //     // io.sockets.emit('get users', users);
-        //     // console.log(users)
-        // }
+    // Update all users
+    // function updateUsernames() {
+    //     // io.sockets.emit('get users', users);
+    //     // console.log(users)
+    // }
 
-        // Update the room usernames
-        RoomUsers: function(roomnum) {
-            var roomUsers = io.sockets.adapter.rooms['room-' + socket.roomnum].users
-            io.sockets.in("room-" + roomnum).emit('get users', roomUsers);
-        },
+    // Update the room usernames
+    RoomUsers: function (roomnum) {
+        var roomUsers = io.sockets.adapter.rooms['room-' + socket.roomnum].users
+        io.sockets.in("room-" + roomnum).emit('get users', roomUsers);
+    },
 
-        // Update the playlist/queue
-        QueueVideos: function() {
-            var vidlist = io.sockets.adapter.rooms['room-' + socket.roomnum].queue
-            var currPlayer = io.sockets.adapter.rooms['room-' + socket.roomnum].currPlayer
-            io.sockets.in("room-" + socket.roomnum).emit('get vidlist', {
-                vidlist: vidlist,
-                currPlayer: currPlayer,
-            });
-        }
+    // Update the playlist/queue
+    QueueVideos: function () {
+        var vidlist = io.sockets.adapter.rooms['room-' + socket.roomnum].queue
+        io.sockets.in("room-" + socket.roomnum).emit('get vidlist', {
+            vidlist: vidlist,
+        });
+    }
 
 }
