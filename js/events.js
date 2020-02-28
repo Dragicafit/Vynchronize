@@ -69,5 +69,3 @@ function playNext(roomnum) {
         }
     })
 }
-
-undefined;

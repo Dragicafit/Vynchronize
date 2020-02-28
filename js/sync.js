@@ -264,7 +264,7 @@ socket.on('syncVideoClient', function (data) {
     //}
 
 });
-/*
+
 // Change video
 socket.on('changeVideoClient', function (data) {
     var videoId = data.videoId;
@@ -290,11 +290,9 @@ socket.on('changeVideoClient', function (data) {
     }, 1000);
 
 });
-*/
+
 // Change time
 socket.on('changeTime', function (data) {
     var time = data.time
     jwplayer().seek(time);
 });
-
-undefined;

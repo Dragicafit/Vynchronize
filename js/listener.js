@@ -13,24 +13,14 @@
      * Listen for messages from the background script.
      * Call "beastify()" or "reset()".
     */
-    browser.runtime.onMessage.addListener((message) => {
-        if (message.command === "new room") {
-            socket.emit("new room", message.roomnum, data => {
-                // This should only call back if the client is the host
-                if (data) {
-                    console.log("Host is syncing the new socket!")
-                    syncVideo(roomnum)
-                }
-            })
-        } else if (message.command === "new user") {
-            socket.emit("new user", message.username, data => {
-                if (data) {
-                    // This sets the room number on the client
-                    if ($roomnum.val() != "") {
-                        roomnum = message.roomnum
-                    }
-                }
-            })
-        }
+    browser.runtime.onMessage.addListener(message => {
+        document.dispatchEvent(new CustomEvent(message.command, { detail: JSON.stringify(message) }))
     });
+
+    var s = document.createElement('script');
+    s.src = browser.runtime.getURL('/js/script.js');
+    s.onload = function () {
+        this.remove();
+    };
+    (document.head || document.documentElement).appendChild(s);
 })();

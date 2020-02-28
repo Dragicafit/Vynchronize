@@ -1,5 +1,6 @@
 //-----------------------------------------------------------------------------
 // Host stuff
+var host = false
 var notifyfix = false
 
 // Sets the host for the room
@@ -111,6 +112,4 @@ socket.on('hostControls', function (data) {
         document.getElementById('player').src = document.getElementById('player').src.replace("&controls=0", "&controls=1")
     }
 });
-
-undefined;
 //-----------------------------------------------------------------------------

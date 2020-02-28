@@ -364,7 +364,7 @@ io.sockets.on('connection', function (socket) {
             })
         }
     })
-    /*
+
     // Change video
     socket.on('change video', function (data, callback) {
         if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
@@ -439,13 +439,7 @@ io.sockets.on('connection', function (socket) {
 
             io.sockets.in("room-" + roomnum).emit('pauseVideoClient');
             // console.log(playerId)
-            switch (playerId) {
-                case 4:
-                    io.sockets.in("room-" + roomnum).emit('createJwplayer', {});
-                    break;
-                default:
-                    console.log("Error invalid player id")
-            }
+            io.sockets.in("room-" + roomnum).emit('createJwplayer', {});
 
             // This changes the room variable to the player id
             // console.log(io.sockets.adapter.rooms['room-' + socket.roomnum].currPlayer)
@@ -462,19 +456,12 @@ io.sockets.on('connection', function (socket) {
         if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
             var playerId = data.playerId
 
-            switch (playerId) {
-                case 4:
-                    socket.emit('createJwplayer', {});
-                    break;
-                default:
-                    console.log("Error invalid player id")
-            }
+            socket.emit('createJwplayer', {});
             // After changing the player, resync with the host
             host = io.sockets.adapter.rooms['room-' + socket.roomnum].host
             socket.broadcast.to(host).emit('getData')
         }
     })
-    */
 
     // Send Message in chat
     socket.on('send message', function (data) {

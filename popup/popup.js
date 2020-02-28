@@ -58,8 +58,7 @@ function chat() {
                     browser.tabs.sendMessage(tabs[0].id,
                         {
                             command: 'new user',
-                            username: $username.val(),
-                            roomnum: $roomnum.val()
+                            username: username
                         }).then(_ => {
                             $userFormArea.hide();
                             $roomArea.show();
@@ -78,21 +77,15 @@ function chat() {
                             document.getElementById("inv_input").value = "vynchronize.herokuapp.com/" + roomnum
                             history.pushState('', 'Vynchronize', roomnum);
                         });
-                }).catch(reportError);
 
-                // Join room
-                browser.tabs.query({
-                    currentWindow: true,
-                    active: true
-                }).then(tabs => {
+                    // Join room
                     browser.tabs.sendMessage(tabs[0].id,
                         {
                             command: 'new room',
                             roomnum: $roomnum.val()
                         });
+                    $username.val('');
                 }).catch(reportError);
-
-                $username.val('');
             }
         });
 
@@ -154,26 +147,9 @@ function reportError(error) {
     console.error(`Could not beastify: ${error}`);
 }
 
-browser.tabs.executeScript({
-    // Bootstrap core JavaScript
-    file: "/js/dependencies/jquery.min.js",
+browser.tabs.query({ currentWindow: true, active: true }).then(tabs => {
+    let tab = tabs[0].id
+    browser.tabs.executeScript(tab, { file: "/js/listener.js" })
+        .then(chat)
+        .catch(reportError);
 })
-    .then(_ => browser.tabs.executeScript({ file: "/js/dependencies/socket.io.js" }))
-    .then(_ => browser.tabs.executeScript({ file: "/js/dependencies/bootstrap.bundle.min.js" }))
-    .then(_ => browser.tabs.executeScript({ file: "/js/dependencies/scrolling-nav.js" }))
-    .then(_ => browser.tabs.executeScript({ file: "/js/dependencies/bootstrap-notify.min.js" }))
-    .then(_ => browser.tabs.executeScript({ file: "/js/dependencies/jquery.easing.min.js" }))
-    .then(_ => browser.tabs.executeScript({ code: "var socket = io.connect(\"http://localhost:3000/\");" }))
-    .then(_ => browser.tabs.executeScript({ code: "var host = false;" }))
-    .then(_ => browser.tabs.executeScript({ file: "/js/listener.js" }))
-    .then(_ => browser.tabs.executeScript({ file: "/js/sync.js" }))
-    .then(_ => browser.tabs.executeScript({ file: "/js/player.js" }))
-    .then(_ => browser.tabs.executeScript({ file: "/js/host.js" }))
-    .then(_ => browser.tabs.executeScript({ file: "/js/events.js" }))
-    .then(_ => browser.tabs.executeScript({ file: "/js/notify.js" }))
-    //.then(_ => browser.tabs.executeScript({ file: "/js/yt.js" }))
-    //.then(_ => browser.tabs.executeScript({ file: "/js/dm.js" }))
-    //.then(_ => browser.tabs.executeScript({ file: "/js/vimeo.js" }))
-    .then(_ => browser.tabs.executeScript({ file: "/js/html5.js" }))
-    .then(chat)
-    .catch(reportError);

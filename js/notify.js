@@ -227,5 +227,3 @@ function betaAlert() {
         z_index: 1031,
     })
 }
-
-undefined;
