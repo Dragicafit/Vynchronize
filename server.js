@@ -315,7 +315,8 @@ io.sockets.on('connection', function (socket) {
             // var videoId = io.sockets.adapter.rooms['room-'+roomnum].currVideo
             io.sockets.in("room-" + roomnum).emit('syncVideoClient', {
                 time: currTime,
-                state: state
+                state: state,
+                videoId: videoId
             })
         }
     });

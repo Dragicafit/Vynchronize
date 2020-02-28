@@ -58,7 +58,8 @@ function chat() {
                     browser.tabs.sendMessage(tabs[0].id,
                         {
                             command: 'new user',
-                            username: username
+                            username: username,
+                            roomnum: $roomnum.val()
                         }).then(_ => {
                             $userFormArea.hide();
                             $roomArea.show();

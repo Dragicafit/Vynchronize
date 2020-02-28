@@ -11,12 +11,12 @@ document.addEventListener('new room', e => {
 
 document.addEventListener('new user', e => {
     var data = JSON.parse(e.detail);
-    socket.emit('new user', data.username, data => {
-        if (data) {
+    socket.emit('new user', data.username, data2 => {
+        if (data2) {
             // This sets the room number on the client
-            //if ($roomnum.val() != "") {
-            roomnum = e.detail.roomnum
-            //}
+            if (data.roomnum != "") {
+                roomnum = data.roomnum
+            }
         }
     })
 });
