@@ -11,9 +11,7 @@ function playOther(roomnum) {
 
 socket.on('justPlay', function (data) {
     console.log("currPlayer")
-    if (jwplayer().getState() == 'paused') {
-        jwplayer().play();
-    }
+    jwplayer().play();
 });
 
 function pauseOther(roomnum) {
@@ -26,7 +24,6 @@ function pauseOther(roomnum) {
 socket.on('justPause', function (data) {
     console.log("hiIamPausing!")
     jwplayer().pause()
-    player.pauseVideo()
 });
 
 function seekOther(roomnum, currTime) {
@@ -36,7 +33,6 @@ function seekOther(roomnum, currTime) {
     });
     // socket.emit('getData');
 }
-
 
 // Weird for YouTube because there is no built in seek event
 // It seeks on an buffer event
