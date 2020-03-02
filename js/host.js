@@ -95,21 +95,4 @@ function test() {
     document.getElementById('player').src = document.getElementById('player').src + '&controls=0'
 }
 
-
-// DEPRECATED DOES NOT WORK PROPERLY
-// Set controls on api to the host, remove controls on other sockets
-socket.on('hostControls', function (data) {
-    // If host disable controls
-    if (!host) {
-        console.log("SOURCE: " + document.getElementById('player').src)
-        // document.getElementById('player').src = document.getElementById('player').src + '&controls=0'
-        document.getElementById('player').src = document.getElementById('player').src.replace("&controls=1", "&controls=0")
-        console.log("POSTSOURCE: " + document.getElementById('player').src)
-
-    }
-    // Give back controls, if needed!
-    else {
-        document.getElementById('player').src = document.getElementById('player').src.replace("&controls=0", "&controls=1")
-    }
-});
 //-----------------------------------------------------------------------------

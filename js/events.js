@@ -34,9 +34,6 @@ function seekOther(roomnum, currTime) {
     // socket.emit('getData');
 }
 
-// Weird for YouTube because there is no built in seek event
-// It seeks on an buffer event
-// Only syncs if off by over .2 seconds
 socket.on('justSeek', function (data) {
     console.log("Seeking Event!")
     currTime = data.time

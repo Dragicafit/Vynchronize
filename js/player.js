@@ -5,6 +5,7 @@ socket.on('getPlayerData', function (data) {
 
     var currTime = jwplayer().getPosition()
     var state = jwplayer().getState() == 'paused'
+
     socket.emit('get host data', {
         room: roomnum,
         currTime: currTime,

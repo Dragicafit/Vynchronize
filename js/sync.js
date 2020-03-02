@@ -22,8 +22,8 @@ function syncVideo(roomnum) {
 
     currTime = jwplayer().currentTime;
     state = jwplayer().getState() == 'paused';
+    console.log("I am host and my current time is " + currTime + state)
 
-    // Required due to vimeo asyncronous functionality
     socket.emit('sync video', {
         room: roomnum,
         time: currTime,
@@ -165,17 +165,6 @@ function prevVideo(roomnum) {
     });
 }
 
-// Get time - DEPRECATED
-// socket.on('getTime', function(data) {
-//     var caller = data.caller
-//     var time = player.getCurrentTime()
-//     console.log("Syncing new socket to time: " + time)
-//     socket.emit('change time', {
-//         time: time,
-//         id: caller
-//     });
-// });
-
 // This just calls the sync host function in the server
 socket.on('getData', function (data) {
     console.log("Hi im the host, you called?")
@@ -246,11 +235,6 @@ socket.on('syncVideoClient', function (data) {
     // changeSinglePlayer(playerId)
     // currPlayer = playerId
 
-    // Change the player if necessary
-    /*if (currPlayer != playerId) {
-        // This changes the player then recalls sync afterwards on the host
-        changeSinglePlayer(playerId)
-    } else {*/
     // This syncs the time and state
     jwplayer().seek(currTime)
 
@@ -281,6 +265,8 @@ socket.on('changeVideoClient', function (data) {
         videoId = id
         // This changes the video
         id = videoId
+
+        //jwplayerLoadVideo(videoId);
     })
 
     // Auto sync with host after 1000ms of changing video
