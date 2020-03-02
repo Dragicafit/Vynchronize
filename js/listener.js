@@ -5,6 +5,7 @@
      * it will do nothing next time.
      */
     if (window.hasRun) {
+        console.log("already running")
         return;
     }
     window.hasRun = true;
