@@ -61,9 +61,6 @@ function chat() {
                             username: username,
                             roomnum: $roomnum.val()
                         }).then(_ => {
-                            $userFormArea.hide();
-                            $roomArea.show();
-
                             // No longer using initarea
                             // var initStuff = document.getElementById("initArea")
                             // initStuff.innerHTML = ""
