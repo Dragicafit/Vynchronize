@@ -160,29 +160,6 @@ function disconnectedAlert() {
     })
 }
 
-// When playNext is called
-function playNextAlert() {
-    $.notify({
-        title: '<strong>Queue</strong>',
-        icon: 'fas fa-list-alt',
-        message: " is empty!"
-    }, {
-        type: 'warning',
-        delay: 400,
-        animate: {
-            enter: 'animated fadeInUp',
-            exit: 'animated fadeOutRight'
-        },
-        placement: {
-            from: "bottom",
-            align: "right"
-        },
-        offset: 20,
-        spacing: 10,
-        z_index: 1031,
-    });
-}
-
 // When user enters a url, but the url is invalid
 function invalidURL() {
     $.notify({

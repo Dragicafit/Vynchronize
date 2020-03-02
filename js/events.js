@@ -46,22 +46,3 @@ socket.on('justSeek', function (data) {
     }
     // playOther(roomnum)
 });
-
-// Needs to grab the next video id and change the video
-function playNext(roomnum) {
-    socket.emit('play next', {}, function (data) {
-        var videoId = data.videoId
-
-        // IF queue is empty do not try to change
-        if (videoId !== "QUEUE IS EMPTY") {
-            // Change the video
-            socket.emit('change video', {
-                room: roomnum,
-                videoId: videoId,
-                time: 0
-            })
-        } else {
-            playNextAlert()
-        }
-    })
-}
