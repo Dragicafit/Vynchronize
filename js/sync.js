@@ -21,7 +21,7 @@ function syncVideo(roomnum) {
     // syncText.innerHTML = "<i class=\"fas fa-sync fa-spin\"></i> Sync"
 
     currTime = jwplayer().getPosition();
-    state = jwplayer().getState() == 'paused';
+    state = jwplayer().getState() !== 'playing';
     console.log("I am host and my current time is " + currTime + state)
 
     socket.emit('sync video', {
@@ -166,6 +166,8 @@ socket.on('pauseVideoClient', function (data) {
 
 // Syncs the video client
 socket.on('syncVideoClient', function (data) {
+    if (host)
+        return
     var currTime = data.time
     var state = data.state
     var videoId = data.videoId
@@ -188,7 +190,9 @@ socket.on('syncVideoClient', function (data) {
     // currPlayer = playerId
 
     // This syncs the time and state
-    jwplayer().seek(currTime)
+    var clientTime = jwplayer().getPosition()
+    if (clientTime < currTime - .1 || clientTime > currTime + .1)
+        jwplayer().seek(currTime)
 
     // Sync player state
     // IF parent player was paused

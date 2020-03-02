@@ -2,10 +2,14 @@
 jwplayer().on('play', function (e) {
     console.log('jwplayer playing', e);
     if (host) {
+        currTime = jwplayer().getPosition()
+        seekOther(roomnum, currTime)
         playOther(roomnum)
     }
     else {
-        getHostData(roomnum)
+        //getHostData(roomnum)
+        if (e.playReason === "interaction" && e.reason === "playing")
+            socket.emit('sync host', {});
     }
 });
 
@@ -13,6 +17,8 @@ jwplayer().on('play', function (e) {
 jwplayer().on('pause', function (e) {
     console.log('jwplayer pausing', e);
     if (host) {
+        currTime = jwplayer().getPosition()
+        seekOther(roomnum, currTime)
         pauseOther(roomnum)
     }
 });
@@ -24,18 +30,18 @@ jwplayer().on('seek', function (e) {
         currTime = e.offset
         seekOther(roomnum, currTime)
     }
-});
+});/*
 jwplayer().on('seeked', function (e) {
     console.log('jwplayer seeked', e);
     if (host) {
         currTime = jwplayer().getPosition()
         seekOther(roomnum, currTime)
     }
-});
+});*/
 
 // Play/pause function
 function jwplayerPlay() {
-    if (jwplayer().getState() == 'paused') {
+    if (jwplayer().getState() !== 'playing') {
         jwplayer().play();
     } else {
         jwplayer().pause();

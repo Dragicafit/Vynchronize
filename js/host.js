@@ -79,10 +79,8 @@ function getHostData(roomnum) {
 socket.on('compareHost', function (data) {
     // The host data
     var hostTime = data.currTime
-    var hostState = data.state
 
     var currTime = jwplayer().getPosition()
-    var state = jwplayer().getState() == 'pause'
 
     // If out of sync
     console.log("curr: " + currTime + " Host: " + hostTime)
