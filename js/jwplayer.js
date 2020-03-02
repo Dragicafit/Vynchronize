@@ -18,10 +18,17 @@ jwplayer().on('pause', function (e) {
 });
 
 // Seek Event
-jwplayer().on('seeked', function (e) {
+jwplayer().on('seek', function (e) {
     console.log('jwplayer seeking', e);
-    currTime = jwplayer().getPosition()
     if (host) {
+        currTime = e.offset
+        seekOther(roomnum, currTime)
+    }
+});
+jwplayer().on('seeked', function (e) {
+    console.log('jwplayer seeked', e);
+    if (host) {
+        currTime = jwplayer().getPosition()
         seekOther(roomnum, currTime)
     }
 });
