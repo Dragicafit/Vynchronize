@@ -145,7 +145,8 @@ function reportError(error) {
     console.error(`Could not beastify: ${error}`);
 }
 
-browser.tabs.query({ currentWindow: true, active: true }).then(tabs => {
+browser.tabs.query({
+    currentWindow: true, active: true, url: "*://*.wakanim.tv/*/episode/*" }).then(tabs => {
     let tab = tabs[0].id
     browser.tabs.executeScript(tab, { file: "/js/listener.js" })
         .then(chat)
