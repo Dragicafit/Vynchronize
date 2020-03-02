@@ -1,5 +1,4 @@
-cat "dependencies/jquery.min.js" > script.js
-cat "dependencies/bootstrap-notify.min.js" >> script.js
+cat "dependencies/bootstrap-notify.min.js" > script.js
 cat "dependencies/socket.io.js" >> script.js
 cat "declare.js" >> script.js
 cat "sync.js" >> script.js
