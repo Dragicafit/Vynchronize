@@ -20,7 +20,7 @@ function syncVideo(roomnum) {
     // console.log(syncText.innerHTML)
     // syncText.innerHTML = "<i class=\"fas fa-sync fa-spin\"></i> Sync"
 
-    currTime = jwplayer().currentTime;
+    currTime = jwplayer().getPosition();
     state = jwplayer().getState() == 'paused';
     console.log("I am host and my current time is " + currTime + state)
 
