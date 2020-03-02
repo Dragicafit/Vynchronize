@@ -58,54 +58,6 @@ function idParse(videoId) {
     return videoId
 }
 
-// This parses the ID out of the video link
-function playlistParse(videoId) {
-    // If user enters a full link
-    return "invalid"
-}
-
-function enqueueVideoParse(roomnum) {
-    var videoId = document.getElementById("inputVideoId").value;
-    enqueueVideo(roomnum, videoId)
-}
-
-// QueueVideo
-function enqueueVideo(roomnum, rawId) {
-    videoId = idParse(rawId)
-    playlistId = playlistParse(rawId)
-
-    if (playlistId != "invalid") {
-        socket.emit('enqueue playlist', {
-            room: roomnum,
-            playlistId: playlistId,
-            user: username
-        })
-    } else if (videoId != "invalid") {
-        socket.emit('enqueue video', {
-            room: roomnum,
-            videoId: videoId,
-            user: username
-        })
-    } else {
-        console.log("User entered an invalid video url :(")
-        invalidURL()
-    }
-}
-
-// Empty Queue
-function emptyQueue(roomnum) {
-
-    // Empty the queue
-    socket.emit('empty queue', {
-        room: roomnum
-    });
-    // Notify
-    socket.emit('notify alerts', {
-        alert: 2,
-        user: username
-    })
-}
-
 function changeVideoParse(roomnum) {
     var videoId = document.getElementById("inputVideoId").value
     changeVideo(roomnum, videoId)
