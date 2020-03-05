@@ -477,11 +477,14 @@ io.sockets.on('connection', function (socket) {
     // New User
     socket.on('new user', function (data, callback) {
         callback(true);
+        if (socket.username)
+            return;
         // Data is username
         var encodedUser = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         socket.username = encodedUser;
         //console.log(socket.username)
-        users.push(socket.username);
+        if (!users.includes(socket.username))
+            users.push(socket.username);
         updateUsernames();
     });
 
