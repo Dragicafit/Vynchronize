@@ -52,7 +52,8 @@ function chat() {
             } else {
                 browser.tabs.query({
                     currentWindow: true,
-                    active: true
+                    active: true,
+                    url: "*://*.wakanim.tv/*/episode/*"
                 }).then(tabs => {
                     browser.tabs.sendMessage(tabs[0].id,
                         {
@@ -113,7 +114,8 @@ function chat() {
 
         browser.tabs.query({
             currentWindow: true,
-            active: true
+            active: true,
+            url: "*://*.wakanim.tv/*/episode/*"
         }).then(tabs => {
             console.log("ask info")
             browser.tabs.sendMessage(tabs[0].id,
@@ -165,7 +167,9 @@ var listener = message => {
 browser.runtime.onMessage.addListener(listener);
 
 browser.tabs.query({
-    currentWindow: true, active: true, url: "*://*.wakanim.tv/*/episode/*"
+    currentWindow: true,
+    active: true,
+    url: "*://*.wakanim.tv/*/episode/*"
 }).then(tabs => {
     let tab = tabs[0].id
     browser.tabs.executeScript(tab, { file: "/js/listener.js" })
