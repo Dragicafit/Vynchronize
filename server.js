@@ -209,9 +209,9 @@ io.sockets.on('connection', function (socket) {
         io.sockets.in("room-" + socket.roomnum).emit('createJwplayer', {});
 
         // Change the video to the current one
-        socket.emit('changeVideoClient', {
-            videoId: currVideo
-        });
+        //socket.emit('changeVideoClient', {
+        //    videoId: currVideo
+        //});
 
         // Get time from host which calls change time for that socket
         if (socket.id != host) {
@@ -227,9 +227,9 @@ io.sockets.on('connection', function (socket) {
             // Push to users in the room
             io.sockets.adapter.rooms['room-' + socket.roomnum].users.push(socket.username)
 
-            // socket.emit('changeVideoClient', {
-            //     videoId: currVideo
-            // });
+            socket.emit('changeVideoClient', {
+                videoId: currVideo
+            });
 
             // This calls back the function on the host client
             //callback(true)

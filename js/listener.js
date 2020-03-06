@@ -6,6 +6,9 @@
      */
     if (window.hasRun) {
         console.log("already running")
+        browser.runtime.sendMessage({
+            command: 'scipt loaded'
+        });
         return;
     }
     window.hasRun = true;
@@ -27,10 +30,24 @@
         });
     });
 
+    document.addEventListener('changeVideoClient', e => {
+        var data = JSON.parse(e.detail);
+        browser.runtime.sendMessage({
+            command: 'changeVideoClient',
+            videoId: data.videoId,
+            location: data.location,
+            username: data.username,
+            roomnum: data.roomnum
+        });
+    });
+
     var s = document.createElement('script');
     s.src = browser.runtime.getURL('/js/script.js');
     s.onload = function () {
         this.remove();
+        browser.runtime.sendMessage({
+            command: 'scipt loaded'
+        });
     };
     (document.head || document.documentElement).appendChild(s);
 })();

@@ -219,14 +219,8 @@ socket.on('changeVideoClient', function (data) {
         // This changes the video
         id = videoId
 
-        //jwplayerLoadVideo(videoId);
+        jwplayerLoadVideo(videoId);
     })
-
-    // Auto sync with host after 1000ms of changing video
-    setTimeout(function () {
-        console.log("resyncing with host after video change")
-        socket.emit('sync host', {});
-    }, 1000);
 
 });
 

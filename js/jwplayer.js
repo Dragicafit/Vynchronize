@@ -47,3 +47,21 @@ function jwplayerPlay() {
         jwplayer().pause();
     }
 }
+
+// Load video
+function jwplayerLoadVideo(videoId) {
+    console.log("changing video to: " + videoId)
+    var pathname = window.location.pathname.split("/")
+
+    if (pathname.length > 5 && pathname[5] == videoId)
+        return;
+
+    document.dispatchEvent(new CustomEvent('changeVideoClient', {
+        detail: JSON.stringify({
+            videoId: videoId,
+            location: pathname.length > 0 ? pathname[1] : "fr",
+            username: username,
+            roomnum: roomnum
+        })
+    }))
+}
