@@ -151,7 +151,7 @@ function changeSinglePlayer(playerId) {
 // Client Synchronization Stuff //
 //------------------------------//
 
-var roomnum = 1
+var roomnum = ""
 var id = "M7lc1UVf-VE"
 
 // Calls the play/pause function

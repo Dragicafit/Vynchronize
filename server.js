@@ -250,6 +250,10 @@ io.sockets.on('connection', function (socket) {
         // This is all of the rooms
         // io.sockets.adapter.rooms['room-1'].currVideo = "this is the video"
         // console.log(io.sockets.adapter.rooms['room-1']);
+
+        callback({
+            roomnum: socket.roomnum
+        });
     });
     // ------------------------------------------------------------------------
 
@@ -476,16 +480,18 @@ io.sockets.on('connection', function (socket) {
 
     // New User
     socket.on('new user', function (data, callback) {
-        callback(true);
-        if (socket.username)
-            return;
-        // Data is username
-        var encodedUser = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        socket.username = encodedUser;
-        //console.log(socket.username)
-        if (!users.includes(socket.username))
-            users.push(socket.username);
-        updateUsernames();
+        if (!socket.username) {
+            // Data is username
+            var encodedUser = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            socket.username = encodedUser;
+            //console.log(socket.username)
+            if (!users.includes(socket.username))
+                users.push(socket.username);
+            updateUsernames();
+        }
+        callback({
+            username: socket.username
+        });
     });
 
     // Changes time for a specific socket

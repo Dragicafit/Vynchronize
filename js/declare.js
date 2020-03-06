@@ -1,5 +1,5 @@
 var socket = io.connect("http://localhost:3000/");
-var roomnum = 1
+var roomnum = ""
 var id = "M7lc1UVf-VE"
 var username = ""
 // Don't allow trailing or leading whitespace!

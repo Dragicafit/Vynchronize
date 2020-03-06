@@ -1,4 +1,4 @@
-var roomnum = 1
+var roomnum = ""
 var id = "M7lc1UVf-VE"
 var username = ""
 // Don't allow trailing or leading whitespace!
@@ -50,7 +50,6 @@ function chat() {
                 var noname2 = document.getElementById('missinginfo2')
                 noname2.innerHTML = "Please enter a room ID without symbols or leading/trailing whitespace!"
             } else {
-                username = $username.val()
                 browser.tabs.query({
                     currentWindow: true,
                     active: true
@@ -58,22 +57,7 @@ function chat() {
                     browser.tabs.sendMessage(tabs[0].id,
                         {
                             command: 'new user',
-                            username: username,
-                            roomnum: $roomnum.val()
-                        }).then(_ => {
-                            // No longer using initarea
-                            // var initStuff = document.getElementById("initArea")
-                            // initStuff.innerHTML = ""
-
-                            // This sets the room number on the client
-                            if ($roomnum.val() != "") {
-                                roomnum = $roomnum.val()
-                            }
-
-                            // Sets the invite link (roomnum)
-                            // document.getElementById('invite').innerHTML = "vynchronize.herokuapp.com/" + roomnum
-                            document.getElementById("inv_input").value = "vynchronize.herokuapp.com/" + roomnum
-                            history.pushState('', 'Vynchronize', roomnum);
+                            username: $username.val(),
                         });
 
                     // Join room
@@ -111,6 +95,32 @@ function chat() {
                 return false;
             }
         });
+
+        browser.runtime.onMessage.addListener(message => {
+            if (message.command == 'send info') {
+                console.log("get info")
+
+                if (message.username)
+                    username = message.username
+                if (message.roomnum)
+                    roomnum = message.roomnum
+
+                // Sets the invite link (roomnum)
+                // document.getElementById('invite').innerHTML = "vynchronize.herokuapp.com/" + roomnum
+                document.getElementById("inv_input").value = "vynchronize.herokuapp.com/" + roomnum
+            }
+        });
+
+        browser.tabs.query({
+            currentWindow: true,
+            active: true
+        }).then(tabs => {
+            console.log("ask info")
+            browser.tabs.sendMessage(tabs[0].id,
+                {
+                    command: 'ask info'
+                });
+        }).catch(reportError);
     });
 }
 
@@ -146,7 +156,8 @@ function reportError(error) {
 }
 
 browser.tabs.query({
-    currentWindow: true, active: true, url: "*://*.wakanim.tv/*/episode/*" }).then(tabs => {
+    currentWindow: true, active: true, url: "*://*.wakanim.tv/*/episode/*"
+}).then(tabs => {
     let tab = tabs[0].id
     browser.tabs.executeScript(tab, { file: "/js/listener.js" })
         .then(chat)
