@@ -151,9 +151,6 @@ function changeSinglePlayer(playerId) {
 // Client Synchronization Stuff //
 //------------------------------//
 
-var roomnum = ""
-var id = "M7lc1UVf-VE"
-
 // Calls the play/pause function
 socket.on('playVideoClient', function (data) {
     // Calls the proper play function for the player
