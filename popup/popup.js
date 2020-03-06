@@ -155,11 +155,19 @@ function reportError(error) {
     console.error(`Could not beastify: ${error}`);
 }
 
+var listener = message => {
+    if (message.command == 'scipt loaded') {
+        console.log("scipt loaded");
+        chrome.runtime.onMessage.removeListener(listener);
+        chat();
+    }
+};
+browser.runtime.onMessage.addListener(listener);
+
 browser.tabs.query({
     currentWindow: true, active: true, url: "*://*.wakanim.tv/*/episode/*"
 }).then(tabs => {
     let tab = tabs[0].id
     browser.tabs.executeScript(tab, { file: "/js/listener.js" })
-        .then(chat)
         .catch(reportError);
 })
