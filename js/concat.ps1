@@ -1,3 +1,4 @@
+#!/bin/bash
 cat "dependencies/bootstrap-notify.min.js" > script.js
 echo "" >> script.js
 cat "dependencies/socket.io.js" >> script.js
