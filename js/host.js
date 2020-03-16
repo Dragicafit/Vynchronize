@@ -8,6 +8,7 @@ socket.on('setHost', function (data) {
     notifyfix = true
     console.log("You are the new host!")
     host = true
+    changeVideoParse(roomnum)
 });
 // Unsets the host
 socket.on('unSetHost', function (data) {

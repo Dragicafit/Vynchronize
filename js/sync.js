@@ -59,7 +59,12 @@ function idParse(videoId) {
 }
 
 function changeVideoParse(roomnum) {
-    var videoId = document.getElementById("inputVideoId").value
+    var pathname = window.location.pathname.split("/")
+
+    if (pathname.length <= 5)
+        return
+        
+    var videoId = pathname[5]
     changeVideo(roomnum, videoId)
 }
 
