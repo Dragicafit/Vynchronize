@@ -10,9 +10,6 @@ rooms = [];
 // Store all of the sockets and their respective room numbers
 userrooms = {}
 
-YT3_API_KEY = process.env.YT3_API_KEY;
-DM_API_KEY = process.env.DM_API_KEY;
-
 // Set given room for url parameter
 var given_room = ""
 
@@ -49,8 +46,6 @@ io.on('connection', function(socket) {
    //Send this event to everyone in the room.
    io.sockets.in("room-"+roomno).emit('connectToRoom', "You are in room no. "+roomno);
 })*/
-
-var roomno = 1;
 
 io.sockets.on('connection', function (socket) {
     // Connect Socket
@@ -176,21 +171,10 @@ io.sockets.on('connection', function (socket) {
             io.sockets.adapter.rooms['room-' + socket.roomnum].currVideo = {
                 jwplayer: '11396'
             }
-            // Previous Video
-            io.sockets.adapter.rooms['room-' + socket.roomnum].prevVideo = {
-                jwplayer: {
-                    id: '11396',
-                    time: 0
-                }
-            }
             // Host username
             io.sockets.adapter.rooms['room-' + socket.roomnum].hostName = socket.username
             // Keep list of online users
             io.sockets.adapter.rooms['room-' + socket.roomnum].users = [socket.username]
-            // Set an empty queue
-            io.sockets.adapter.rooms['room-' + socket.roomnum].queue = {
-                jwplayer: []
-            }
         }
 
         // Set Host label
@@ -198,12 +182,8 @@ io.sockets.on('connection', function (socket) {
             username: io.sockets.adapter.rooms['room-' + socket.roomnum].hostName
         })
 
-        // Set Queue
-        updateQueueVideos()
-
         // Gets current video from room variable
         var currVideo = io.sockets.adapter.rooms['room-' + socket.roomnum].currVideo.jwplayer
-        var currYT = io.sockets.adapter.rooms['room-' + socket.roomnum].currVideo.yt
 
         // Change the video player to current One
         io.sockets.in("room-" + socket.roomnum).emit('createJwplayer', {});
@@ -294,21 +274,6 @@ io.sockets.on('connection', function (socket) {
         // socket.broadcast.to(host).emit('getData');
     });
 
-    socket.on('play next', function (data, callback) {
-        var videoId = "QUEUE IS EMPTY"
-        if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
-            if (io.sockets.adapter.rooms['room-' + socket.roomnum].queue.jwplayer.length > 0) {
-                videoId = io.sockets.adapter.rooms['room-' + socket.roomnum].queue.jwplayer.shift().videoId
-            }
-            // console.log(videoId)
-            // Remove video from the front end
-            updateQueueVideos()
-            callback({
-                videoId: videoId
-            })
-        }
-    });
-
     // Sync video
     socket.on('sync video', function (data) {
         if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
@@ -325,53 +290,8 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
-    // Enqueue video
-    // Gets title then calls back
-    socket.on('enqueue video', function (data) {
-        if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
-            test = false
-            var user = data.user
-            var videoId = data.videoId
-            var title = ""
-            io.sockets.adapter.rooms['room-' + socket.roomnum].queue.jwplayer.push({
-                videoId: videoId,
-                title: title
-            })
-        }
-    })
-
-    // Empty the queue
-    socket.on('empty queue', function (data) {
-        if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
-            io.sockets.adapter.rooms['room-' + socket.roomnum].queue.jwplayer = []
-            updateQueueVideos()
-        }
-    })
-
-    // Remove a specific video from queue
-    socket.on('remove at', function (data) {
-        if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
-            var idx = data.idx
-            io.sockets.adapter.rooms['room-' + socket.roomnum].queue.jwplayer.splice(idx, 1)
-            updateQueueVideos()
-        }
-    })
-
-    // Play a specific video from queue
-    socket.on('play at', function (data, callback) {
-        if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
-            var idx = data.idx
-            var videoId = ""
-            io.sockets.adapter.rooms['room-' + socket.roomnum].queue.jwplayer.splice(idx, 1)
-            updateQueueVideos()
-            callback({
-                videoId: videoId
-            })
-        }
-    })
-
     // Change video
-    socket.on('change video', function (data, callback) {
+    socket.on('change video', function (data) {
         if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
             var roomnum = data.room
             var videoId = data.videoId
@@ -380,22 +300,12 @@ io.sockets.on('connection', function (socket) {
 
             // This changes the room variable to the video id
             // io.sockets.adapter.rooms['room-' + roomnum].currVideo = videoId
-            // Set prev video before changing
-            io.sockets.adapter.rooms['room-' + socket.roomnum].prevVideo.jwplayer.id = io.sockets.adapter.rooms['room-' + socket.roomnum].currVideo.jwplayer
-            io.sockets.adapter.rooms['room-' + socket.roomnum].prevVideo.jwplayer.time = time
             // Set new video id
             io.sockets.adapter.rooms['room-' + socket.roomnum].currVideo.jwplayer = videoId
 
             io.sockets.in("room-" + roomnum).emit('changeVideoClient', {
                 videoId: videoId
             });
-
-            // If called from previous video, do a callback to seek to the right time
-            if (data.prev) {
-                // Call back to return the video id
-                callback()
-            }
-
         }
 
         // Auto sync with host after 1000ms of changing video
@@ -406,25 +316,6 @@ io.sockets.on('connection', function (socket) {
 
         // console.log(io.sockets.adapter.rooms['room-1'])
     });
-
-    // Change to previous video
-    socket.on('change previous video', function (data, callback) {
-        if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
-            var roomnum = data.room
-            var host = io.sockets.adapter.rooms['room-' + socket.roomnum].host
-
-            // This sets the videoId to the proper previous video
-            var videoId = io.sockets.adapter.rooms['room-' + socket.roomnum].prevVideo.jwplayer.id
-            var time = io.sockets.adapter.rooms['room-' + socket.roomnum].prevVideo.jwplayer.time
-
-            console.log("Hot Swapping to Previous Video: " + videoId + " at current time: " + time)
-            // Callback to go back to client to request the video change
-            callback({
-                videoId: videoId,
-                time: time
-            })
-        }
-    })
 
     // Get video id based on player
     socket.on('get video', function (callback) {
@@ -467,16 +358,6 @@ io.sockets.on('connection', function (socket) {
             socket.broadcast.to(host).emit('getData')
         }
     })
-
-    // Send Message in chat
-    socket.on('send message', function (data) {
-        var encodedMsg = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        // console.log(data);
-        io.sockets.in("room-" + socket.roomnum).emit('new message', {
-            msg: encodedMsg,
-            user: socket.username
-        });
-    });
 
     // New User
     socket.on('new user', function (data, callback) {
@@ -673,15 +554,4 @@ io.sockets.on('connection', function (socket) {
             io.sockets.in("room-" + roomnum).emit('get users', roomUsers)
         }
     }
-
-    // Update the playlist/queue
-    function updateQueueVideos() {
-        if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
-            var vidlist = io.sockets.adapter.rooms['room-' + socket.roomnum].queue
-            io.sockets.in("room-" + socket.roomnum).emit('get vidlist', {
-                vidlist: vidlist,
-            })
-        }
-    }
-
 })
