@@ -8,7 +8,7 @@ browser.runtime.onMessage.addListener((message, sender) => {
             var listener = message => {
                 if (message.command == 'scipt loaded') {
                     console.log("scipt loaded");
-                    chrome.runtime.onMessage.removeListener(listener);
+                    browser.runtime.onMessage.removeListener(listener);
                     sendInfo();
                 }
             };
@@ -40,3 +40,5 @@ browser.runtime.onMessage.addListener((message, sender) => {
 function reportError(error) {
     console.error(`Could not beastify: ${error}`);
 }
+
+browser.tabs.onUpdated.addListener()
