@@ -24,7 +24,7 @@ browser.runtime.onMessage.addListener((message, sender) => {
     }
 });
 
-function sendInfo() {
+function sendInfo(tabId) {
     console.log("send info")
     browser.tabs.sendMessage(tabId,
         {
@@ -43,7 +43,7 @@ function insertScript(tabId) {
         if (message.command == 'scipt loaded') {
             console.log("scipt loaded");
             browser.runtime.onMessage.removeListener(listener);
-            sendInfo();
+            sendInfo(tabId);
         }
     };
     browser.runtime.onMessage.addListener(listener);

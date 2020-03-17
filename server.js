@@ -100,10 +100,11 @@ io.sockets.on('connection', function (socket) {
             // If you are the host
             if (socket.id == room.host) {
                 // Reassign
-                console.log("hello i am the host " + socket.id + " and i am leaving my responsibilities to " + Object.keys(room.sockets)[0])
+                room.host = undefined
+                /*console.log("hello i am the host " + socket.id + " and i am leaving my responsibilities to " + Object.keys(room.sockets)[0])
                 io.to(Object.keys(room.sockets)[0]).emit('autoHost', {
                     roomnum: roomnum
-                })
+                })*/
             }
 
             // Remove from users list
@@ -145,14 +146,13 @@ io.sockets.on('connection', function (socket) {
 
         // Checks if the room exists or not
         // console.log(io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined)
-        if (io.sockets.adapter.rooms['room-' + socket.roomnum] === undefined) {
+        if (io.sockets.adapter.rooms['room-' + socket.roomnum] === undefined || io.sockets.adapter.rooms['room-' + socket.roomnum].host === undefined) {
             socket.send(socket.id)
             // Sets the first socket to join as the host
             host = socket.id
             init = true
 
             // Set the host on the client side
-            socket.emit('setHost');
             //console.log(socket.id)
         } else {
             console.log(socket.roomnum)
@@ -232,7 +232,8 @@ io.sockets.on('connection', function (socket) {
         // console.log(io.sockets.adapter.rooms['room-1']);
 
         callback({
-            roomnum: socket.roomnum
+            roomnum: socket.roomnum,
+            host: init
         });
     });
     // ------------------------------------------------------------------------

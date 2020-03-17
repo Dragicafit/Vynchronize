@@ -4,8 +4,14 @@ document.addEventListener('new room', e => {
         if (data2) {
             // This sets the room number on the client
             roomnum = data2.roomnum
+            host = data2.host
+            if (host) {
+                notifyfix = true
+                console.log("You are the new host!")
+                changeVideoParse(roomnum)
+            }
 
-            console.log("send room number after new room")
+            console.log("send room number after new room " + roomnum)
             document.dispatchEvent(new CustomEvent('send info', {
                 detail: JSON.stringify({
                     roomnum: roomnum
@@ -22,7 +28,7 @@ document.addEventListener('new user', e => {
             // This sets the user name on the client
             username = data2.username
 
-            console.log("send user name after new user")
+            console.log("send user name after new user " + username)
             document.dispatchEvent(new CustomEvent('send info', {
                 detail: JSON.stringify({
                     username: username
