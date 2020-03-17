@@ -1,5 +1,4 @@
 var roomnum = ""
-var id = "M7lc1UVf-VE"
 var username = ""
 // Don't allow trailing or leading whitespace!
 var nosymbols = new RegExp("^(([a-zA-Z0-9_-][a-zA-Z0-9 _-]*[a-zA-Z0-9_-])|([a-zA-Z0-9_-]*))$");
@@ -160,7 +159,7 @@ function reportError(error) {
 var listener = message => {
     if (message.command == 'scipt loaded') {
         console.log("scipt loaded");
-        chrome.runtime.onMessage.removeListener(listener);
+        browser.runtime.onMessage.removeListener(listener);
         chat();
     }
 };
@@ -174,4 +173,8 @@ browser.tabs.query({
     let tab = tabs[0].id
     browser.tabs.executeScript(tab, { file: "/js/listener.js" })
         .catch(reportError);
+    browser.runtime.sendMessage({
+        command: 'createVideoClient',
+        'tab': tab
+    });
 })
