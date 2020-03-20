@@ -39,15 +39,6 @@ jwplayer().on('seeked', function (e) {
         seekOther(roomnum, currTime)
     }
 });*/
-
-    // Play/pause function
-    function jwplayerPlay() {
-        if (jwplayer().getState() !== 'playing') {
-            jwplayer().play();
-        } else {
-            jwplayer().pause();
-        }
-    }
 }
 
 // Load video

@@ -1,15 +1,3 @@
-// Calls the play video function on the server
-function playVideo(roomnum) {
-    // dailyPlayer.play();
-    //vimeoPlayer.play()
-    socket.emit('play video', {
-        room: roomnum
-    });
-
-    // Doesn't work well unless called in server
-    //io.sockets.in("room-"+roomnum).emit('playVideoClient');
-}
-
 // Calls the sync function on the server
 function syncVideo(roomnum) {
     var currTime = jwplayer().getPosition();
@@ -104,12 +92,6 @@ socket.on('getData', function (data) {
 //------------------------------//
 // Client Synchronization Stuff //
 //------------------------------//
-
-// Calls the play/pause function
-socket.on('playVideoClient', function (data) {
-    // Calls the proper play function for the player
-    jwplayerPlay()
-});
 
 socket.on('pauseVideoClient', function (data) {
     jwplayer().pause()

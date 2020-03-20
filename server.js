@@ -244,12 +244,6 @@ io.sockets.on('connection', function (socket) {
     // ------------------------- Socket Functions -----------------------------
     // ------------------------------------------------------------------------
 
-    // Play video
-    socket.on('play video', function (data) {
-        var roomnum = data.room
-        io.sockets.in("room-" + roomnum).emit('playVideoClient');
-    });
-
     // Event Listener Functions
     // Broadcast so host doesn't continuously call it on itself!
     socket.on('play other', function (data) {
