@@ -312,16 +312,6 @@ io.sockets.on('connection', function (socket) {
         // console.log(io.sockets.adapter.rooms['room-1'])
     });
 
-    // Get video id based on player
-    socket.on('get video', function (callback) {
-        if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
-            // Gets current video from room variable
-            var currVideo = io.sockets.adapter.rooms['room-' + socket.roomnum].currVideo.jwplayer
-            // Call back to return the video id
-            callback(currVideo)
-        }
-    })
-
     // New User
     socket.on('new user', function (data, callback) {
         if (!socket.username) {
@@ -335,16 +325,6 @@ io.sockets.on('connection', function (socket) {
         }
         callback({
             username: socket.username
-        });
-    });
-
-    // Changes time for a specific socket
-    socket.on('change time', function (data) {
-        // console.log(data);
-        var caller = data.id
-        var time = data.time
-        socket.broadcast.to(caller).emit('changeTime', {
-            time: time
         });
     });
 

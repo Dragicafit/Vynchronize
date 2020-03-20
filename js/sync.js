@@ -138,25 +138,5 @@ socket.on('changeVideoClient', function (data) {
     var videoId = data.videoId;
     console.log("video id is: " + videoId)
 
-    // Pause right before changing
-    // pauseOther(roomnum)
-
-    // This is getting the video id from the server
-    // The original change video call updates the value for the room
-    // This probably is more inefficient than just passing in the parameter but is safer?
-    socket.emit('get video', function (id) {
-        console.log("it really is " + id)
-        videoId = id
-        // This changes the video
-        id = videoId
-
-        jwplayerLoadVideo(videoId);
-    })
-
-});
-
-// Change time
-socket.on('changeTime', function (data) {
-    var time = data.time
-    jwplayer().seek(time);
+    jwplayerLoadVideo(videoId)
 });
