@@ -88,14 +88,9 @@ socket.on('getData', function (data) {
     //socket.emit('change video', { time: time });
 });
 
-
 //------------------------------//
 // Client Synchronization Stuff //
 //------------------------------//
-
-socket.on('pauseVideoClient', function (data) {
-    jwplayer().pause()
-});
 
 // Syncs the video client
 socket.on('syncVideoClient', function (data) {
