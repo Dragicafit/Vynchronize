@@ -1,6 +1,6 @@
 var roomnum = ""
 var username = ""
-var tab = ""
+var tab
 
 browser.runtime.onMessage.addListener((message, sender) => {
     if (message.command == 'changeVideoClient') {

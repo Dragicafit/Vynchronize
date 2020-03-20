@@ -1,6 +1,6 @@
 var roomnum = ""
 var username = ""
-var tab = 0
+var tab
 // Don't allow trailing or leading whitespace!
 var nosymbols = new RegExp("^(([a-zA-Z0-9_-][a-zA-Z0-9 _-]*[a-zA-Z0-9_-])|([a-zA-Z0-9_-]*))$");
 
