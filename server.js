@@ -328,38 +328,6 @@ io.sockets.on('connection', function (socket) {
         }
     })
 
-    // Change video player
-    socket.on('change player', function (data) {
-        if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
-            var roomnum = data.room
-            var playerId = data.playerId
-
-            io.sockets.in("room-" + roomnum).emit('pauseVideoClient');
-            // console.log(playerId)
-            io.sockets.in("room-" + roomnum).emit('createJwplayer', {});
-
-            // This changes the room variable to the player id
-            // console.log(io.sockets.adapter.rooms['room-' + socket.roomnum].currPlayer)
-
-            // This syncs the host whenever the player changes
-            host = io.sockets.adapter.rooms['room-' + socket.roomnum].host
-            socket.broadcast.to(host).emit('getData')
-        }
-
-    })
-
-    // Change video player
-    socket.on('change single player', function (data) {
-        if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
-            var playerId = data.playerId
-
-            socket.emit('createJwplayer', {});
-            // After changing the player, resync with the host
-            host = io.sockets.adapter.rooms['room-' + socket.roomnum].host
-            socket.broadcast.to(host).emit('getData')
-        }
-    })
-
     // New User
     socket.on('new user', function (data, callback) {
         if (!socket.username) {
@@ -399,12 +367,6 @@ io.sockets.on('connection', function (socket) {
             }
         }
     })
-
-    // Emits the player status
-    socket.on('player status', function (data) {
-        // console.log(data);
-        console.log(data)
-    });
 
     // Change host
     socket.on('change host', function (data) {
@@ -508,38 +470,6 @@ io.sockets.on('connection', function (socket) {
                 console.log("Error alert id")
         }
     })
-
-    //------------------------------------------------------------------------------
-    // Async get current time
-    socket.on('auto sync', function (data) {
-        var async = require("async");
-        var http = require("http");
-
-        //Delay of 5 seconds
-        var delay = 5000;
-
-        async.forever(
-
-            function (next) {
-                // Continuously update stream with data
-                //var time = io.sockets.in("room-"+1).emit('getTime', {});
-                //Store data in database
-                //console.log(time);
-
-                console.log("i am auto syncing")
-                socket.emit('syncHost');
-
-                //Repeat after the delay
-                setTimeout(function () {
-                    next();
-                }, delay)
-            },
-            function (err) {
-                console.error(err);
-            }
-        );
-    });
-
 
     // Some update functions --------------------------------------------------
     // Update all users

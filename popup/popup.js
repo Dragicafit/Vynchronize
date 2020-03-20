@@ -1,5 +1,6 @@
 var roomnum = ""
 var username = ""
+var tab = 0
 // Don't allow trailing or leading whitespace!
 var nosymbols = new RegExp("^(([a-zA-Z0-9_-][a-zA-Z0-9 _-]*[a-zA-Z0-9_-])|([a-zA-Z0-9_-]*))$");
 
@@ -49,25 +50,19 @@ function chat() {
                 var noname2 = document.getElementById('missinginfo2')
                 noname2.innerHTML = "Please enter a room ID without symbols or leading/trailing whitespace!"
             } else {
-                browser.tabs.query({
-                    currentWindow: true,
-                    active: true,
-                    url: "*://*.wakanim.tv/*/episode/*"
-                }).then(tabs => {
-                    browser.tabs.sendMessage(tabs[0].id,
-                        {
-                            command: 'new user',
-                            username: $username.val(),
-                        });
+                browser.tabs.sendMessage(tab,
+                    {
+                        command: 'new user',
+                        username: $username.val(),
+                    });
 
-                    // Join room
-                    browser.tabs.sendMessage(tabs[0].id,
-                        {
-                            command: 'new room',
-                            roomnum: $roomnum.val()
-                        });
-                    $username.val('');
-                }).catch(reportError);
+                // Join room
+                browser.tabs.sendMessage(tab,
+                    {
+                        command: 'new room',
+                        roomnum: $roomnum.val()
+                    });
+                $username.val('');
             }
         });
 
@@ -110,18 +105,10 @@ function chat() {
                 document.getElementById("inv_input").value = "vynchronize.herokuapp.com/" + roomnum
             }
         });
-
-        browser.tabs.query({
-            currentWindow: true,
-            active: true,
-            url: "*://*.wakanim.tv/*/episode/*"
-        }).then(tabs => {
-            console.log("ask info")
-            browser.tabs.sendMessage(tabs[0].id,
-                {
-                    command: 'ask info'
-                });
-        }).catch(reportError);
+        console.log("ask info")
+        browser.tabs.sendMessage(tab, {
+            command: 'ask info'
+        });
     });
 }
 
@@ -177,14 +164,15 @@ browser.tabs.query({
     }
 })
 
-function injectScript(tab) {
-    browser.tabs.executeScript(tab, {
+function injectScript(tabId) {
+    tab = tabId
+    browser.tabs.executeScript(tabId, {
         runAt: "document_end",
         file: "/js/listener.js"
     })
         .catch(reportError);
     browser.runtime.sendMessage({
         command: 'createVideoClient',
-        'tab': tab
+        'tab': tabId
     });
 }

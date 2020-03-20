@@ -12,16 +12,9 @@ function playVideo(roomnum) {
 
 // Calls the sync function on the server
 function syncVideo(roomnum) {
-    var currTime = 0
-    var state
+    var currTime = jwplayer().getPosition();
+    var state = jwplayer().getState() !== 'playing';
     var videoId = id
-
-    // var syncText = document.getElementById("syncbutton")
-    // console.log(syncText.innerHTML)
-    // syncText.innerHTML = "<i class=\"fas fa-sync fa-spin\"></i> Sync"
-
-    currTime = jwplayer().getPosition();
-    state = jwplayer().getState() !== 'playing';
     console.log("I am host and my current time is " + currTime + state)
 
     socket.emit('sync video', {
@@ -34,7 +27,7 @@ function syncVideo(roomnum) {
 
 // This return the current time
 function getTime() {
-    return jwplayer().getPosition();
+    return typeof jwplayer === 'undefined' ? 0 : jwplayer().getPosition();
 }
 
 function seekTo(time) {
@@ -100,57 +93,12 @@ function changeVideoId(roomnum, id) {
     //player.loadVideoById(videoId);
 }
 
-// Change to previous video
-function prevVideo(roomnum) {
-    // This gets the previous video
-    socket.emit('change previous video', {
-        room: roomnum
-    }, function (data) {
-        // Actually change the video!
-        var prevTime = data.time
-        var time = getTime()
-        socket.emit('change video', {
-            room: roomnum,
-            videoId: data.videoId,
-            time: time,
-            prev: true
-        }, function (data) {
-            // Set to the previous time
-            setTimeout(function () {
-                seekTo(prevTime)
-            }, 1200);
-        });
-    });
-}
-
 // This just calls the sync host function in the server
 socket.on('getData', function (data) {
     console.log("Hi im the host, you called?")
     socket.emit('sync host', {});
     //socket.emit('change video', { time: time });
 });
-/*
-function changePlayer(roomnum, playerId) {
-    if (playerId != currPlayer) {
-        socket.emit('change player', {
-            room: roomnum,
-            playerId: playerId
-        });
-    }
-}
-
-// Change a single player
-function changeSinglePlayer(playerId) {
-    return new Promise((resolve, reject) => {
-        if (playerId != currPlayer) {
-            socket.emit('change single player', {
-                playerId: playerId
-            });
-        }
-        resolve("socket entered change single player function")
-    })
-}
-*/
 
 
 //------------------------------//

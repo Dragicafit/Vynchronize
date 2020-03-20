@@ -22,9 +22,11 @@ socket.on('getData', function (data) {
     socket.emit('sync host', {});
 });
 // Calls sync
-socket.on('syncHost', function (data) {
-    syncVideo(roomnum)
-});
+if (typeof jwplayer !== 'undefined') {
+    socket.on('syncHost', function (data) {
+        syncVideo(roomnum)
+    });
+}
 
 //Change the host
 function changeHost(roomnum) {
@@ -75,20 +77,21 @@ function getHostData(roomnum) {
         room: roomnum
     });
 }
+if (typeof jwplayer !== 'undefined') {
+    // Uses the host data to compare
+    socket.on('compareHost', function (data) {
+        // The host data
+        var hostTime = data.currTime
 
-// Uses the host data to compare
-socket.on('compareHost', function (data) {
-    // The host data
-    var hostTime = data.currTime
+        var currTime = jwplayer().getPosition()
 
-    var currTime = jwplayer().getPosition()
-
-    // If out of sync
-    console.log("curr: " + currTime + " Host: " + hostTime)
-    if (currTime < hostTime - 2 || currTime > hostTime + 2) {
-        disconnected()
-    }
-});
+        // If out of sync
+        console.log("curr: " + currTime + " Host: " + hostTime)
+        if (currTime < hostTime - 2 || currTime > hostTime + 2) {
+            disconnected()
+        }
+    });
+}
 
 function test() {
     document.getElementById('player').src = document.getElementById('player').src + '&controls=0'
