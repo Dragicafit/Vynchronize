@@ -7,6 +7,8 @@ browser.runtime.onMessage.addListener((message, sender) => {
         console.log("change video client")
 
         var tabId = sender.tab.id;
+        if (tabId != tab)
+            return;
 
         browser.tabs.update(tabId, { active: true, url: "https://www.wakanim.tv/" + message.location + "/v2/catalogue/reactivate/" + message.videoId }).then(_ => {
             insertScript(tabId);

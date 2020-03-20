@@ -168,13 +168,23 @@ browser.runtime.onMessage.addListener(listener);
 browser.tabs.query({
     currentWindow: true,
     active: true,
-    url: "*://*.wakanim.tv/*/episode/*"
+    url: "*://*.wakanim.tv/*"
 }).then(tabs => {
-    let tab = tabs[0].id
-    browser.tabs.executeScript(tab, { file: "/js/listener.js" })
+    if (tabs.length == 0) {
+        browser.tabs.create({ url: "https://www.wakanim.tv/" }).then(injectScript)
+    } else {
+        injectScript(tabs[0].id)
+    }
+})
+
+function injectScript(tab) {
+    browser.tabs.executeScript(tab, {
+        runAt: "document_end",
+        file: "/js/listener.js"
+    })
         .catch(reportError);
     browser.runtime.sendMessage({
         command: 'createVideoClient',
         'tab': tab
     });
-})
+}
