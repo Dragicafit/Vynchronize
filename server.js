@@ -75,6 +75,7 @@ io.on('connection', (socket) => {
             if (err)
                 return console.error("join fail");
 
+            room = io.sockets.adapter.rooms['room-' + socket.roomnum];
             if (init) {
                 room.host = host;
                 room.currVideo = '11396';
