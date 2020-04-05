@@ -158,19 +158,20 @@ browser.tabs.query({
     if (tabs.length == 0) {
         browser.tabs.create({ url: "https://www.wakanim.tv/" }).then(injectScript);
     } else {
-        injectScript(tabs[0].id);
+        injectScript(tabs[0]);
     }
 });
 
 function injectScript(tabId) {
-    tab = tabId;
-    browser.tabs.executeScript(tabId, {
+    console.log(tabId);
+    tab = tabId.id;
+    browser.tabs.executeScript(tab, {
         runAt: "document_end",
         file: "/js/listener.js"
     })
         .catch(reportError);
     browser.runtime.sendMessage({
         command: 'createVideoClient',
-        'tab': tabId
+        'tab': tab
     });
 }
