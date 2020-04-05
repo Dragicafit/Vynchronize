@@ -2,7 +2,7 @@ var roomnum = ""
 var username = ""
 var tab
 // Don't allow trailing or leading whitespace!
-var nosymbols = new RegExp("^(([a-zA-Z0-9_-][a-zA-Z0-9 _-]*[a-zA-Z0-9_-])|([a-zA-Z0-9_-]*))$");
+var nosymbols = /^[\w-]+$/;
 
 // Chat stuff
 function chat() {
@@ -69,7 +69,6 @@ function chat() {
 
         // Prevent special characters from being typed
         $('#roomnum').on('keypress', function (event) {
-            var nosymbols = new RegExp("^[a-zA-Z0-9\s]+$");
             var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
             console.log(key)
             console.log(event.keyCode)
@@ -82,7 +81,6 @@ function chat() {
 
         // Prevent special characters from being typed
         $('#username').on('keypress', function (event) {
-            var nosymbols = new RegExp("^[a-zA-Z0-9\s]+$");
             var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
             // Allow enters and spaces to be used still
             if ($username.val().length > 30 || !nosymbols.test(key) && event.keyCode != 13 && event.keyCode != 32 && event.keyCode != 45 && event.keyCode != 95) {
