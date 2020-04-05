@@ -1,10 +1,10 @@
-var roomnum = ""
-var username = ""
-var tab
+var roomnum = "";
+var username = "";
+var tab;
 
 browser.runtime.onMessage.addListener((message, sender) => {
     if (message.command == 'changeVideoClient') {
-        console.log("change video client")
+        console.log("change video client");
 
         var tabId = sender.tab.id;
         if (tabId != tab)
@@ -14,20 +14,20 @@ browser.runtime.onMessage.addListener((message, sender) => {
             insertScript(tabId);
         });
     } else if (message.command == 'createVideoClient') {
-        console.log("create video client")
-        tab = message.tab
+        console.log("create video client");
+        tab = message.tab;
     } else if (message.command == 'send info') {
-        console.log("get info")
+        console.log("get info");
 
         if (message.username)
-            username = message.username
+            username = message.username;
         if (message.roomnum)
-            roomnum = message.roomnum
+            roomnum = message.roomnum;
     }
 });
 
 function sendInfo(tabId) {
-    console.log("send info")
+    console.log("send info");
     browser.tabs.sendMessage(tabId,
         {
             command: 'new user',
@@ -50,7 +50,7 @@ function insertScript(tabId) {
     };
     browser.runtime.onMessage.addListener(listener);
 
-    console.log("executeScript")
+    console.log("executeScript");
     browser.tabs.executeScript(tabId, {
         runAt: "document_end",
         file: "/js/listener.js"
@@ -60,8 +60,8 @@ function insertScript(tabId) {
 
 browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
     if (tabId === tab && changeInfo.url) {
-        console.log("updated")
-        insertScript(tabId)
+        console.log("updated");
+        insertScript(tabId);
     }
 }, { urls: ["*://*.wakanim.tv/*/episode/*"] });
 

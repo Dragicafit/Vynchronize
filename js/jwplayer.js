@@ -3,9 +3,9 @@ if (typeof jwplayer !== 'undefined') {
     jwplayer().on('play', function (e) {
         console.log('jwplayer playing', e);
         if (host) {
-            currTime = jwplayer().getPosition()
-            seekOther(roomnum, currTime)
-            playOther(roomnum)
+            currTime = jwplayer().getPosition();
+            seekOther(roomnum, currTime);
+            playOther(roomnum);
         }
         else {
             //getHostData(roomnum)
@@ -18,9 +18,9 @@ if (typeof jwplayer !== 'undefined') {
     jwplayer().on('pause', function (e) {
         console.log('jwplayer pausing', e);
         if (host) {
-            currTime = jwplayer().getPosition()
-            seekOther(roomnum, currTime)
-            pauseOther(roomnum)
+            currTime = jwplayer().getPosition();
+            seekOther(roomnum, currTime);
+            pauseOther(roomnum);
         }
     });
 
@@ -28,8 +28,8 @@ if (typeof jwplayer !== 'undefined') {
     jwplayer().on('seek', function (e) {
         console.log('jwplayer seeking', e);
         if (host) {
-            currTime = e.offset
-            seekOther(roomnum, currTime)
+            currTime = e.offset;
+            seekOther(roomnum, currTime);
         }
     });/*
 jwplayer().on('seeked', function (e) {
@@ -43,8 +43,8 @@ jwplayer().on('seeked', function (e) {
 
 // Load video
 function jwplayerLoadVideo(videoId) {
-    console.log("changing video to: " + videoId)
-    var pathname = window.location.pathname.split("/")
+    console.log("changing video to: " + videoId);
+    var pathname = window.location.pathname.split("/");
 
     if (pathname.length > 5 && pathname[5] == videoId)
         return;
@@ -56,5 +56,5 @@ function jwplayerLoadVideo(videoId) {
             username: username,
             roomnum: roomnum
         })
-    }))
+    }));
 }

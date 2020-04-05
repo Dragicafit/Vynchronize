@@ -1,30 +1,30 @@
 //-----------------------------------------------------------------------------
 // Host stuff
-var host = false
-var notifyfix = false
+var host = false;
+var notifyfix = false;
 
 // Sets the host for the room
 socket.on('setHost', function (data) {
-    notifyfix = true
-    console.log("You are the new host!")
-    host = true
-    changeVideoParse(roomnum)
+    notifyfix = true;
+    console.log("You are the new host!");
+    host = true;
+    changeVideoParse(roomnum);
 });
 // Unsets the host
 socket.on('unSetHost', function (data) {
-    console.log("Unsetting host")
-    host = false
+    console.log("Unsetting host");
+    host = false;
 });
 
 // This grabs data and calls sync FROM the host
 socket.on('getData', function (data) {
-    console.log("Hi im the host, you called?")
+    console.log("Hi im the host, you called?");
     socket.emit('sync host', {});
 });
 // Calls sync
 if (typeof jwplayer !== 'undefined') {
     socket.on('syncHost', function (data) {
-        syncVideo(roomnum)
+        syncVideo(roomnum);
     });
 }
 
@@ -37,7 +37,7 @@ function changeHost(roomnum) {
         socket.emit('notify alerts', {
             alert: 1,
             user: username
-        })
+        });
     }
 }
 /*
@@ -58,16 +58,16 @@ socket.on('changeHostLabel', function (data) {
 */
 // When the host leaves, the server calls this function on the next socket
 socket.on('autoHost', function (data) {
-    changeHost(data.roomnum)
-})
+    changeHost(data.roomnum);
+});
 
 // If user gets disconnected from the host, give warning!
 function disconnected() {
     // boolean to prevent alert on join
     if (notifyfix) {
-        disconnectedAlert()
+        disconnectedAlert();
     } else {
-        notifyfix = true
+        notifyfix = true;
     }
 }
 
@@ -81,20 +81,20 @@ if (typeof jwplayer !== 'undefined') {
     // Uses the host data to compare
     socket.on('compareHost', function (data) {
         // The host data
-        var hostTime = data.currTime
+        var hostTime = data.currTime;
 
-        var currTime = jwplayer().getPosition()
+        var currTime = jwplayer().getPosition();
 
         // If out of sync
-        console.log("curr: " + currTime + " Host: " + hostTime)
+        console.log("curr: " + currTime + " Host: " + hostTime);
         if (currTime < hostTime - 2 || currTime > hostTime + 2) {
-            disconnected()
+            disconnected();
         }
     });
 }
 
 function test() {
-    document.getElementById('player').src = document.getElementById('player').src + '&controls=0'
+    document.getElementById('player').src = document.getElementById('player').src + '&controls=0';
 }
 
 //-----------------------------------------------------------------------------

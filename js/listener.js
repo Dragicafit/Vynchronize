@@ -5,7 +5,7 @@
      * it will do nothing next time.
      */
     if (window.hasRun) {
-        console.log("already running")
+        console.log("already running");
         browser.runtime.sendMessage({
             command: 'scipt loaded'
         });
@@ -18,7 +18,7 @@
      * Call "beastify()" or "reset()".
     */
     browser.runtime.onMessage.addListener(message => {
-        document.dispatchEvent(new CustomEvent(message.command, { detail: JSON.stringify(message) }))
+        document.dispatchEvent(new CustomEvent(message.command, { detail: JSON.stringify(message) }));
     });
 
     document.addEventListener('send info', e => {

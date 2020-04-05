@@ -5,9 +5,9 @@
 
 // Enqueue Notify (0)
 socket.on('enqueueNotify', function (data) {
-    console.log("Enqueue Notify Alert")
-    var title = data.title
-    var user = data.user
+    console.log("Enqueue Notify Alert");
+    var title = data.title;
+    var user = data.user;
     // Generate notify alert
     $.notify({
         title: '<strong>' + user + '</strong>',
@@ -27,13 +27,13 @@ socket.on('enqueueNotify', function (data) {
         offset: 20,
         spacing: 10,
         z_index: 1031,
-    })
-})
+    });
+});
 
 // Change Host (1)
 socket.on('changeHostNotify', function (data) {
-    console.log("Host Change Notify Alert")
-    var user = data.user
+    console.log("Host Change Notify Alert");
+    var user = data.user;
 
     $.notify({
         title: '<strong>Host Changed: </strong>',
@@ -54,12 +54,12 @@ socket.on('changeHostNotify', function (data) {
         spacing: 10,
         z_index: 1031,
     });
-})
+});
 
 // Empty Queue (2)
 socket.on('emptyQueueNotify', function (data) {
-    console.log("Empty Queue Notify Alert")
-    var user = data.user
+    console.log("Empty Queue Notify Alert");
+    var user = data.user;
 
     $.notify({
         title: '<strong>' + user + '</strong>',
@@ -80,11 +80,11 @@ socket.on('emptyQueueNotify', function (data) {
         spacing: 10,
         z_index: 1031,
     });
-})
+});
 
 // Beta Message (3)
 socket.on('betaNotify', function (data) {
-    console.log("Beta Notify Alert")
+    console.log("Beta Notify Alert");
 
     $.notify({
         title: '<strong>Warning: </strong>',
@@ -105,7 +105,7 @@ socket.on('betaNotify', function (data) {
         spacing: 10,
         z_index: 1031,
     });
-})
+});
 
 //------------------------------------------------------------------------------
 // Not part of the server function
@@ -134,7 +134,7 @@ function syncAlert() {
         offset: 20,
         spacing: 10,
         z_index: 1031,
-    })
+    });
 }
 
 // When user gets out of sync from the host
@@ -157,7 +157,7 @@ function disconnectedAlert() {
         offset: 20,
         spacing: 10,
         z_index: 1031,
-    })
+    });
 }
 
 // When user enters a url, but the url is invalid
@@ -180,7 +180,7 @@ function invalidURL() {
         offset: 20,
         spacing: 10,
         z_index: 1031,
-    })
+    });
 }
 
 function betaAlert() {
@@ -202,5 +202,5 @@ function betaAlert() {
         offset: 20,
         spacing: 10,
         z_index: 1031,
-    })
+    });
 }

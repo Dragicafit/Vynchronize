@@ -10,7 +10,7 @@ if (typeof jwplayer !== 'undefined') {
     }
 
     socket.on('justPlay', function (data) {
-        console.log("currPlayer")
+        console.log("currPlayer");
         jwplayer().play();
     });
 
@@ -22,8 +22,8 @@ if (typeof jwplayer !== 'undefined') {
     }
 
     socket.on('justPause', function (data) {
-        console.log("hiIamPausing!")
-        jwplayer().pause()
+        console.log("hiIamPausing!");
+        jwplayer().pause();
     });
 
     function seekOther(roomnum, currTime) {
@@ -35,11 +35,11 @@ if (typeof jwplayer !== 'undefined') {
     }
 
     socket.on('justSeek', function (data) {
-        console.log("Seeking Event!")
-        currTime = data.time
-        var clientTime = jwplayer().getPosition()
+        console.log("Seeking Event!");
+        currTime = data.time;
+        var clientTime = jwplayer().getPosition();
         if (clientTime < currTime - .2 || clientTime > currTime + .2) {
-            jwplayer().seek(currTime)
+            jwplayer().seek(currTime);
         }
         // playOther(roomnum)
     });

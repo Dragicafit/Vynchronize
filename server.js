@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-'use strict'
+'use strict';
 
 require('dotenv').config();
 
@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 
 var users = [];
 var connections = 0;
-var userrooms = {}
+var userrooms = {};
 var nosymbols = /^[\w-]+$/;
 
 server.listen(port, () => {
@@ -31,13 +31,13 @@ io.on('connection', (socket) => {
             updateUsernames();
         }
 
-        var id = socket.id
-        var roomnum = userrooms[id]
-        var room = io.sockets.adapter.rooms['room-' + roomnum]
+        var id = socket.id;
+        var roomnum = userrooms[id];
+        var room = io.sockets.adapter.rooms['room-' + roomnum];
 
         if (room != null) {
             if (socket.id == room.host) {
-                room.host = undefined
+                room.host = undefined;
             }
             const index = room.users.indexOf(socket.username);
             if (index > -1) {
@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
                 updateRoomUsers(roomnum);
             }
         }
-        delete userrooms[id]
+        delete userrooms[id];
     });
 
     socket.on('new room', function (data, callback) {
@@ -54,53 +54,53 @@ io.on('connection', (socket) => {
             return callback();
 
         socket.roomnum = data;
-        userrooms[socket.id] = data
+        userrooms[socket.id] = data;
 
-        var host = null
-        var init = false
+        var host = null;
+        var init = false;
 
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
 
         if (room == null || room.host == null) {
-            socket.send(socket.id)
-            host = socket.id
-            init = true
+            socket.send(socket.id);
+            host = socket.id;
+            init = true;
         } else {
-            console.log(socket.roomnum)
-            host = room.host
+            console.log(socket.roomnum);
+            host = room.host;
         }
 
-        console.log(socket.username + " connected to room-" + socket.roomnum)
+        console.log(socket.username + " connected to room-" + socket.roomnum);
         socket.join("room-" + socket.roomnum, (err) => {
             if (err)
                 return console.error("join fail");
 
             if (init) {
-                room.host = host
-                room.currVideo = '11396'
-                room.hostName = socket.username
-                room.users = [socket.username]
+                room.host = host;
+                room.currVideo = '11396';
+                room.hostName = socket.username;
+                room.users = [socket.username];
             }
             io.sockets.in("room-" + socket.roomnum).emit('changeHostLabel', {
                 username: room.hostName
-            })
+            });
 
             io.sockets.in("room-" + socket.roomnum).emit('createJwplayer', {});
 
             if (socket.id != host) {
-                console.log("call the damn host " + host)
+                console.log("call the damn host " + host);
                 setTimeout(function () {
                     socket.broadcast.to(host).emit('getData');
                 }, 1000);
-                room.users.push(socket.username)
+                room.users.push(socket.username);
 
                 socket.emit('changeVideoClient', {
                     videoId: room.currVideo
                 });
             } else {
-                console.log("I am the host")
+                console.log("I am the host");
             }
-            updateRoomUsers(socket.roomnum)
+            updateRoomUsers(socket.roomnum);
             callback({
                 roomnum: socket.roomnum,
                 host: init
@@ -109,18 +109,18 @@ io.on('connection', (socket) => {
     });
 
     socket.on('play other', function (data) {
-        var roomnum = data.room
+        var roomnum = data.room;
         socket.broadcast.to("room-" + roomnum).emit('justPlay');
     });
 
     socket.on('pause other', function (data) {
-        var roomnum = data.room
+        var roomnum = data.room;
         socket.broadcast.to("room-" + roomnum).emit('justPause');
     });
 
     socket.on('seek other', function (data) {
-        var roomnum = data.room
-        var currTime = data.time
+        var roomnum = data.room;
+        var currTime = data.time;
         socket.broadcast.to("room-" + roomnum).emit('justSeek', {
             time: currTime
         });
@@ -128,25 +128,25 @@ io.on('connection', (socket) => {
 
     socket.on('sync video', function (data) {
         if (io.sockets.adapter.rooms['room-' + socket.roomnum] != null) {
-            var roomnum = data.room
-            var currTime = data.time
-            var state = data.state
-            var videoId = data.videoId
+            var roomnum = data.room;
+            var currTime = data.time;
+            var state = data.state;
+            var videoId = data.videoId;
             // var videoId = io.sockets.adapter.rooms['room-'+roomnum].currVideo
             io.sockets.in("room-" + roomnum).emit('syncVideoClient', {
                 time: currTime,
                 state: state,
                 videoId: videoId
-            })
+            });
         }
     });
 
     socket.on('change video', function (data) {
         if (io.sockets.adapter.rooms['room-' + socket.roomnum] != null) {
-            var roomnum = data.room
-            var videoId = data.videoId
+            var roomnum = data.room;
+            var videoId = data.videoId;
 
-            io.sockets.adapter.rooms['room-' + socket.roomnum].currVideo = videoId
+            io.sockets.adapter.rooms['room-' + socket.roomnum].currVideo = videoId;
 
             io.sockets.in("room-" + roomnum).emit('changeVideoClient', {
                 videoId: videoId
@@ -172,106 +172,106 @@ io.on('connection', (socket) => {
 
     socket.on('sync host', function (data) {
         if (io.sockets.adapter.rooms['room-' + socket.roomnum] != null) {
-            var host = io.sockets.adapter.rooms['room-' + socket.roomnum].host
+            var host = io.sockets.adapter.rooms['room-' + socket.roomnum].host;
 
             if (socket.id != host) {
-                socket.broadcast.to(host).emit('getData')
+                socket.broadcast.to(host).emit('getData');
             } else {
-                socket.emit('syncHost')
+                socket.emit('syncHost');
             }
         }
-    })
+    });
 
     socket.on('change host', function (data) {
         if (io.sockets.adapter.rooms['room-' + socket.roomnum] != null) {
-            console.log(io.sockets.adapter.rooms['room-' + socket.roomnum])
-            var roomnum = data.room
-            var newHost = socket.id
-            var currHost = io.sockets.adapter.rooms['room-' + socket.roomnum].host
+            console.log(io.sockets.adapter.rooms['room-' + socket.roomnum]);
+            var roomnum = data.room;
+            var newHost = socket.id;
+            var currHost = io.sockets.adapter.rooms['room-' + socket.roomnum].host;
 
             if (newHost != currHost) {
                 console.log("I want to be the host and my socket id is: " + newHost);
 
-                socket.broadcast.to(currHost).emit('unSetHost')
-                io.sockets.adapter.rooms['room-' + socket.roomnum].host = newHost
-                socket.emit('setHost')
+                socket.broadcast.to(currHost).emit('unSetHost');
+                io.sockets.adapter.rooms['room-' + socket.roomnum].host = newHost;
+                socket.emit('setHost');
 
-                io.sockets.adapter.rooms['room-' + socket.roomnum].hostName = socket.username
+                io.sockets.adapter.rooms['room-' + socket.roomnum].hostName = socket.username;
                 io.sockets.in("room-" + roomnum).emit('changeHostLabel', {
                     username: socket.username
-                })
+                });
                 socket.emit('notify alerts', {
                     alert: 1,
                     user: socket.username
-                })
+                });
             }
         }
-    })
+    });
 
     socket.on('get host data', function (data) {
         if (io.sockets.adapter.rooms['room-' + socket.roomnum] != null) {
-            var roomnum = data.room
-            var host = io.sockets.adapter.rooms['room-' + roomnum].host
+            var roomnum = data.room;
+            var host = io.sockets.adapter.rooms['room-' + roomnum].host;
 
             if (data.currTime == null) {
-                var caller = socket.id
+                var caller = socket.id;
                 socket.broadcast.to(host).emit('getPlayerData', {
                     room: roomnum,
                     caller: caller
-                })
+                });
             } else {
-                var caller = data.caller
+                var caller = data.caller;
                 socket.broadcast.to(caller).emit('compareHost', data);
             }
         }
 
-    })
+    });
 
     socket.on('notify alerts', function (data) {
-        var alert = data.alert
-        console.log("entered notify alerts")
-        var encodedUser = ""
+        var alert = data.alert;
+        console.log("entered notify alerts");
+        var encodedUser = "";
         if (data.user) {
-            encodedUser = data.user.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+            encodedUser = data.user.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
 
         switch (alert) {
             case 0:
-                var encodedTitle = ""
+                var encodedTitle = "";
                 if (data.title) {
-                    encodedTitle = data.title.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+                    encodedTitle = data.title.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                 }
                 io.sockets.in("room-" + socket.roomnum).emit('enqueueNotify', {
                     user: encodedUser,
                     title: encodedTitle
-                })
+                });
                 break;
             case 1:
                 io.sockets.in("room-" + socket.roomnum).emit('changeHostNotify', {
                     user: encodedUser
-                })
+                });
                 break;
             case 2:
                 io.sockets.in("room-" + socket.roomnum).emit('emptyQueueNotify', {
                     user: encodedUser
-                })
+                });
                 break;
             case 3:
-                console.log("yoyoyoyoyo")
-                io.sockets.in("room-" + socket.roomnum).emit('betaNotify', {})
+                console.log("yoyoyoyoyo");
+                io.sockets.in("room-" + socket.roomnum).emit('betaNotify', {});
                 break;
             default:
-                console.log("Error alert id")
+                console.log("Error alert id");
         }
-    })
+    });
 
     function updateUsernames() {
     }
 
     function updateRoomUsers(roomnum) {
         if (io.sockets.adapter.rooms['room-' + socket.roomnum] != null) {
-            var roomUsers = io.sockets.adapter.rooms['room-' + socket.roomnum].users
-            io.sockets.in("room-" + roomnum).emit('get users', roomUsers)
+            var roomUsers = io.sockets.adapter.rooms['room-' + socket.roomnum].users;
+            io.sockets.in("room-" + roomnum).emit('get users', roomUsers);
         }
     }
-})
+});

@@ -1,6 +1,6 @@
-var roomnum = ""
-var username = ""
-var tab
+var roomnum = "";
+var username = "";
+var tab;
 // Don't allow trailing or leading whitespace!
 var nosymbols = /^[\w-]+$/;
 
@@ -25,30 +25,30 @@ function chat() {
 
             // If name not entered
             if ($username.val() == "") {
-                console.log("ENTER A NAME")
-                var noname = document.getElementById('missinginfo')
-                noname.innerHTML = "Surely you have a name right? Enter it below!"
+                console.log("ENTER A NAME");
+                var noname = document.getElementById('missinginfo');
+                noname.innerHTML = "Surely you have a name right? Enter it below!";
             }
             // If name is too long
             else if ($username.val().length > 30) {
-                console.log("NAME IS TOO LONG")
-                var noname = document.getElementById('missinginfo')
-                noname.innerHTML = "Your name can't possibly be over 30 characters!"
+                console.log("NAME IS TOO LONG");
+                var noname = document.getElementById('missinginfo');
+                noname.innerHTML = "Your name can't possibly be over 30 characters!";
             }
             // If roomnate
             else if ($roomnum.val().length > 50) {
-                console.log("ROOM NAME IS TOO LONG")
-                var noname = document.getElementById('missinginfo')
-                noname.innerHTML = "How are you going to remember a room code that has more than 50 characters?"
+                console.log("ROOM NAME IS TOO LONG");
+                var noname = document.getElementById('missinginfo');
+                noname.innerHTML = "How are you going to remember a room code that has more than 50 characters?";
             }
             // If Room contains symbols
             // Can only be reached if the user decided to be sneaky and paste them!
             else if (!nosymbols.test($roomnum.val())) {
-                console.log("ENTER A PROPER ROOMNUMBER")
-                var noname = document.getElementById('missinginfo')
-                noname.innerHTML = ""
-                var noname2 = document.getElementById('missinginfo2')
-                noname2.innerHTML = "Please enter a room ID without symbols or leading/trailing whitespace!"
+                console.log("ENTER A PROPER ROOMNUMBER");
+                var noname = document.getElementById('missinginfo');
+                noname.innerHTML = "";
+                var noname2 = document.getElementById('missinginfo2');
+                noname2.innerHTML = "Please enter a room ID without symbols or leading/trailing whitespace!";
             } else {
                 browser.tabs.sendMessage(tab,
                     {
@@ -70,8 +70,8 @@ function chat() {
         // Prevent special characters from being typed
         $('#roomnum').on('keypress', function (event) {
             var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-            console.log(key)
-            console.log(event.keyCode)
+            console.log(key);
+            console.log(event.keyCode);
             // Allow enters and spaces to be used still
             if ($roomnum.val().length > 50 || !nosymbols.test(key) && event.keyCode != 13 && event.keyCode != 32 && event.keyCode != 45 && event.keyCode != 95) {
                 event.preventDefault();
@@ -91,19 +91,19 @@ function chat() {
 
         browser.runtime.onMessage.addListener(message => {
             if (message.command == 'send info') {
-                console.log("get info")
+                console.log("get info");
 
                 if (message.username)
-                    username = message.username
+                    username = message.username;
                 if (message.roomnum)
-                    roomnum = message.roomnum
+                    roomnum = message.roomnum;
 
                 // Sets the invite link (roomnum)
                 // document.getElementById('invite').innerHTML = "vynchronize.herokuapp.com/" + roomnum
-                document.getElementById("inv_input").value = "vynchronize.herokuapp.com/" + roomnum
+                document.getElementById("inv_input").value = "vynchronize.herokuapp.com/" + roomnum;
             }
         });
-        console.log("ask info")
+        console.log("ask info");
         browser.tabs.sendMessage(tab, {
             command: 'ask info'
         });
@@ -113,7 +113,7 @@ function chat() {
 function copyInvite() {
     /* Get the text field */
     var copyText = document.getElementById("inv_input");
-    console.log(copyText)
+    console.log(copyText);
     /* Select the text field */
     copyText.select();
     /* Copy the text inside the text field */
@@ -131,7 +131,7 @@ function outFunc() {
 
 // Generate a random alphanumeric room id
 function randomroom() {
-    document.getElementById('roomnum').value = Math.random().toString(36).substr(2, 12)
+    document.getElementById('roomnum').value = Math.random().toString(36).substr(2, 12);
 }
 
 /**
@@ -156,14 +156,14 @@ browser.tabs.query({
     url: "*://*.wakanim.tv/*"
 }).then(tabs => {
     if (tabs.length == 0) {
-        browser.tabs.create({ url: "https://www.wakanim.tv/" }).then(injectScript)
+        browser.tabs.create({ url: "https://www.wakanim.tv/" }).then(injectScript);
     } else {
-        injectScript(tabs[0].id)
+        injectScript(tabs[0].id);
     }
-})
+});
 
 function injectScript(tabId) {
-    tab = tabId
+    tab = tabId;
     browser.tabs.executeScript(tabId, {
         runAt: "document_end",
         file: "/js/listener.js"
