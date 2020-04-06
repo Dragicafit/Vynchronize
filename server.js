@@ -2,9 +2,15 @@
 'use strict';
 
 require('dotenv').config();
+const fs = require("fs");
+
+const options = {
+    key: fs.readFileSync("key.pem"),
+    cert: fs.readFileSync("cert.pem")
+};
 
 const app = require('express')();
-const server = require('http').createServer(app);
+const server = require('https').createServer(options, app);
 const io = require('socket.io')(server);
 const port = process.env.PORT || 3000;
 
