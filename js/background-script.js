@@ -10,7 +10,7 @@ browser.runtime.onMessage.addListener((message, sender) => {
         if (tabId != tab)
             return;
 
-        browser.tabs.update(tabId, { active: true, url: "https://www.wakanim.tv/" + message.location + "/v2/catalogue/reactivate/" + message.videoId }).then(_ => {
+        browser.tabs.update(tabId, { active: true, url: "https://www.wakanim.tv/" + message.location + "/v2/catalogue/episode/" + message.videoId }).then(_ => {
             insertScript(tabId);
         });
     } else if (message.command == 'createVideoClient') {
