@@ -1,8 +1,6 @@
 var host = false;
-var notifyfix = false;
 
 socket.on('setHost', function (data) {
-    notifyfix = true;
     console.log("You are the new host!");
     host = true;
     changeVideoParse(roomnum);
@@ -29,24 +27,12 @@ function changeHost(roomnum) {
         socket.emit('change host', {
             room: roomnum
         });
-        socket.emit('notify alerts', {
-            alert: 1,
-            user: username
-        });
     }
 }
 
 socket.on('autoHost', function (data) {
     changeHost(data.roomnum);
 });
-
-function disconnected() {
-    if (notifyfix) {
-        disconnectedAlert();
-    } else {
-        notifyfix = true;
-    }
-}
 
 function getHostData(roomnum) {
     socket.emit('get host data', {
@@ -60,9 +46,6 @@ if (typeof jwplayer !== 'undefined') {
         var currTime = jwplayer().getPosition();
 
         console.log("curr: " + currTime + " Host: " + hostTime);
-        if (currTime < hostTime - 2 || currTime > hostTime + 2) {
-            disconnected();
-        }
     });
 }
 

@@ -1,7 +1,5 @@
 #!/bin/bash
-cat "dependencies/bootstrap-notify.min.js" > script.js
-echo "" >> script.js
-cat "dependencies/socket.io.js" >> script.js
+cat "dependencies/socket.io.js" > script.js
 echo "" >> script.js
 cat "declare.js" >> script.js
 echo "" >> script.js
@@ -12,8 +10,6 @@ echo "" >> script.js
 cat "host.js" >> script.js
 echo "" >> script.js
 cat "events.js" >> script.js
-echo "" >> script.js
-cat "notify.js" >> script.js
 echo "" >> script.js
 cat "jwplayer.js" >> script.js
 echo "" >> script.js

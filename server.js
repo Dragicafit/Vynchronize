@@ -204,10 +204,6 @@ io.on('connection', (socket) => {
                 io.sockets.in("room-" + roomnum).emit('changeHostLabel', {
                     username: socket.username
                 });
-                socket.emit('notify alerts', {
-                    alert: 1,
-                    user: socket.username
-                });
             }
         }
     });
@@ -229,44 +225,6 @@ io.on('connection', (socket) => {
             }
         }
 
-    });
-
-    socket.on('notify alerts', function (data) {
-        var alert = data.alert;
-        console.log("entered notify alerts");
-        var encodedUser = "";
-        if (data.user) {
-            encodedUser = data.user.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
-
-        switch (alert) {
-            case 0:
-                var encodedTitle = "";
-                if (data.title) {
-                    encodedTitle = data.title.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                }
-                io.sockets.in("room-" + socket.roomnum).emit('enqueueNotify', {
-                    user: encodedUser,
-                    title: encodedTitle
-                });
-                break;
-            case 1:
-                io.sockets.in("room-" + socket.roomnum).emit('changeHostNotify', {
-                    user: encodedUser
-                });
-                break;
-            case 2:
-                io.sockets.in("room-" + socket.roomnum).emit('emptyQueueNotify', {
-                    user: encodedUser
-                });
-                break;
-            case 3:
-                console.log("yoyoyoyoyo");
-                io.sockets.in("room-" + socket.roomnum).emit('betaNotify', {});
-                break;
-            default:
-                console.log("Error alert id");
-        }
     });
 
     function updateRoomUsers(roomnum) {

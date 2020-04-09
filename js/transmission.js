@@ -5,7 +5,6 @@ document.addEventListener('new room', e => {
             roomnum = data2.roomnum;
             host = data2.host;
             if (host) {
-                notifyfix = true;
                 console.log("You are the new host!");
                 changeVideoParse(roomnum);
             }
