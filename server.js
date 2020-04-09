@@ -34,7 +34,6 @@ io.on('connection', (socket) => {
         const index = users.indexOf(socket.username);
         if (index > -1) {
             users.splice(index, 1);
-            updateUsernames();
         }
 
         var id = socket.id;
@@ -169,7 +168,6 @@ io.on('connection', (socket) => {
             socket.username = data;
             if (!users.includes(socket.username))
                 users.push(socket.username);
-            updateUsernames();
         }
         callback({
             username: socket.username
@@ -270,9 +268,6 @@ io.on('connection', (socket) => {
                 console.log("Error alert id");
         }
     });
-
-    function updateUsernames() {
-    }
 
     function updateRoomUsers(roomnum) {
         if (io.sockets.adapter.rooms['room-' + socket.roomnum] != null) {
