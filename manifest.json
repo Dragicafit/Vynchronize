@@ -9,7 +9,8 @@
   "permissions": [
     "*://*.wakanim.tv/*/episode/*",
     "activeTab",
-    "tabs"
+    "tabs",
+    "storage"
   ],
 
   "background": {

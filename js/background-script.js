@@ -1,5 +1,4 @@
 var roomsTabs = {};
-var username = "";
 
 browser.runtime.onMessage.addListener((message, sender) => {
     if (message.command == 'changeVideoClient') {
@@ -19,7 +18,7 @@ browser.runtime.onMessage.addListener((message, sender) => {
 
         var tabId = sender.tab.id;
         if (message.username)
-            username = message.username;
+            browser.storage.local.set({ username: message.username });
         if (message.roomnum)
             roomsTabs[tabId] = message.roomnum;
     }
@@ -27,16 +26,18 @@ browser.runtime.onMessage.addListener((message, sender) => {
 
 function sendInfo(tabId) {
     console.log("send info");
-    browser.tabs.sendMessage(tabId,
-        {
-            command: 'new user',
-            username: username,
-        }).catch(reportError);
-    browser.tabs.sendMessage(tabId,
-        {
-            command: 'new room',
-            roomnum: roomsTabs[tabId]
-        }).catch(reportError);
+    browser.storage.local.get('username').then(item => {
+        browser.tabs.sendMessage(tabId,
+            {
+                command: 'new user',
+                username: item['username'],
+            }).catch(reportError);
+        browser.tabs.sendMessage(tabId,
+            {
+                command: 'new room',
+                roomnum: roomsTabs[tabId]
+            }).catch(reportError);
+    });
 }
 
 function insertScript(tabId) {

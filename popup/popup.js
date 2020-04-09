@@ -1,5 +1,4 @@
 var roomnum = "";
-var username = "";
 var tab;
 var nosymbols = /^[\w-]+$/;
 
@@ -74,7 +73,7 @@ function chat() {
                 console.log("get info");
 
                 if (message.username)
-                    username = message.username;
+                    browser.storage.local.set({ username: message.username });
                 if (message.roomnum)
                     roomnum = message.roomnum;
 
