@@ -1,4 +1,3 @@
-// Gets all the player data
 socket.on('getPlayerData', function (data) {
     var roomnum = data.room;
     var caller = data.caller;

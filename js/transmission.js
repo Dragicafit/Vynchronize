@@ -2,7 +2,6 @@ document.addEventListener('new room', e => {
     var data = JSON.parse(e.detail);
     socket.emit('new room', data.roomnum, data2 => {
         if (data2) {
-            // This sets the room number on the client
             roomnum = data2.roomnum;
             host = data2.host;
             if (host) {
@@ -25,7 +24,6 @@ document.addEventListener('new user', e => {
     var data = JSON.parse(e.detail);
     socket.emit('new user', data.username, data2 => {
         if (data2) {
-            // This sets the user name on the client
             username = data2.username;
 
             console.log("send user name after new user " + username);

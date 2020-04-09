@@ -1,5 +1,4 @@
 if (typeof jwplayer !== 'undefined') {
-    // Play Event
     jwplayer().on('play', function (e) {
         console.log('jwplayer playing', e);
         if (host) {
@@ -8,13 +7,11 @@ if (typeof jwplayer !== 'undefined') {
             playOther(roomnum);
         }
         else {
-            //getHostData(roomnum)
             if (e.playReason === "interaction" && e.reason === "playing")
                 socket.emit('sync host', {});
         }
     });
 
-    // Pause Event
     jwplayer().on('pause', function (e) {
         console.log('jwplayer pausing', e);
         if (host) {
@@ -24,24 +21,15 @@ if (typeof jwplayer !== 'undefined') {
         }
     });
 
-    // Seek Event
     jwplayer().on('seek', function (e) {
         console.log('jwplayer seeking', e);
         if (host) {
             currTime = e.offset;
             seekOther(roomnum, currTime);
         }
-    });/*
-jwplayer().on('seeked', function (e) {
-    console.log('jwplayer seeked', e);
-    if (host) {
-        currTime = jwplayer().getPosition()
-        seekOther(roomnum, currTime)
-    }
-});*/
+    });
 }
 
-// Load video
 function jwplayerLoadVideo(videoId) {
     console.log("changing video to: " + videoId);
     var pathname = window.location.pathname.split("/");

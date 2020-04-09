@@ -1,7 +1,3 @@
-// These functions just simply play or pause the player
-// Created for event listeners
-
-//-----------------------------------------------------------------------------
 if (typeof jwplayer !== 'undefined') {
     function playOther(roomnum) {
         socket.emit('play other', {
@@ -18,7 +14,6 @@ if (typeof jwplayer !== 'undefined') {
         socket.emit('pause other', {
             room: roomnum
         });
-        //socket.broadcast.to("room-"+roomnum).emit('justPlay');
     }
 
     socket.on('justPause', function (data) {
@@ -31,7 +26,6 @@ if (typeof jwplayer !== 'undefined') {
             room: roomnum,
             time: currTime
         });
-        // socket.emit('getData');
     }
 
     socket.on('justSeek', function (data) {
@@ -41,6 +35,5 @@ if (typeof jwplayer !== 'undefined') {
         if (clientTime < currTime - .2 || clientTime > currTime + .2) {
             jwplayer().seek(currTime);
         }
-        // playOther(roomnum)
     });
 }

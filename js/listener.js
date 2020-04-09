@@ -1,9 +1,4 @@
 (function () {
-    /**
-     * Check and set a global guard variable.
-     * If this content script is injected into the same page again,
-     * it will do nothing next time.
-     */
     if (window.hasRun) {
         console.log("already running");
         browser.runtime.sendMessage({
@@ -12,11 +7,7 @@
         return;
     }
     window.hasRun = true;
-
-    /**
-     * Listen for messages from the background script.
-     * Call "beastify()" or "reset()".
-    */
+    
     browser.runtime.onMessage.addListener(message => {
         document.dispatchEvent(new CustomEvent(message.command, { detail: JSON.stringify(message) }));
     });

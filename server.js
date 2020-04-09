@@ -139,7 +139,6 @@ io.on('connection', (socket) => {
             var currTime = data.time;
             var state = data.state;
             var videoId = data.videoId;
-            // var videoId = io.sockets.adapter.rooms['room-'+roomnum].currVideo
             io.sockets.in("room-" + roomnum).emit('syncVideoClient', {
                 time: currTime,
                 state: state,
