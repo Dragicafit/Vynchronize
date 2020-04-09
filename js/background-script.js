@@ -1,28 +1,27 @@
-var roomnum = "";
+var roomsTabs = {};
 var username = "";
-var tab;
 
 browser.runtime.onMessage.addListener((message, sender) => {
     if (message.command == 'changeVideoClient') {
         console.log("change video client");
 
         var tabId = sender.tab.id;
-        if (tabId != tab)
+        if (roomsTabs[tabId] != null)
             return;
 
-        browser.tabs.update(tabId, { active: true, url: "https://www.wakanim.tv/" + message.location + "/v2/catalogue/episode/" + message.videoId }).then(_ => {
-            insertScript(tabId);
-        });
+        browser.tabs.update(tabId, { active: true, url: "https://www.wakanim.tv/" + message.location + "/v2/catalogue/episode/" + message.videoId });
     } else if (message.command == 'createVideoClient') {
         console.log("create video client");
-        tab = message.tab;
+
+        roomsTabs[message.tab] = 0;
     } else if (message.command == 'send info') {
         console.log("get info");
 
+        var tabId = sender.tab.id;
         if (message.username)
             username = message.username;
         if (message.roomnum)
-            roomnum = message.roomnum;
+            roomsTabs[tabId] = message.roomnum;
     }
 });
 
@@ -36,7 +35,7 @@ function sendInfo(tabId) {
     browser.tabs.sendMessage(tabId,
         {
             command: 'new room',
-            roomnum: roomnum
+            roomnum: roomsTabs[tabId]
         }).catch(reportError);
 }
 
@@ -58,12 +57,12 @@ function insertScript(tabId) {
         .catch(reportError);
 }
 
-browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
-    if (tabId === tab && changeInfo.url) {
+browser.tabs.onUpdated.addListener((tabId) => {
+    if (roomsTabs[tabId] != null) {
         console.log("updated");
         insertScript(tabId);
     }
-}, { urls: ["*://*.wakanim.tv/*/episode/*"] });
+});
 
 function reportError(error) {
     console.error(`Could not beastify: ${error}`);
