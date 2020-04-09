@@ -6,7 +6,7 @@ browser.runtime.onMessage.addListener((message, sender) => {
         console.log("change video client");
 
         var tabId = sender.tab.id;
-        if (roomsTabs[tabId] != null)
+        if (roomsTabs[tabId] == null)
             return;
 
         browser.tabs.update(tabId, { active: true, url: "https://www.wakanim.tv/" + message.location + "/v2/catalogue/episode/" + message.videoId });
@@ -58,10 +58,10 @@ function insertScript(tabId) {
 }
 
 browser.tabs.onUpdated.addListener((tabId) => {
-    if (roomsTabs[tabId] != null) {
-        console.log("updated");
-        insertScript(tabId);
-    }
+    if (roomsTabs[tabId] == null)
+        return;
+    console.log("updated");
+    insertScript(tabId);
 });
 
 function reportError(error) {

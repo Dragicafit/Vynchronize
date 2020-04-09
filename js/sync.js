@@ -98,6 +98,7 @@ socket.on('syncVideoClient', function (data) {
 
 socket.on('changeVideoClient', function (data) {
     var videoId = data.videoId;
+    id = videoId
     console.log("video id is: " + videoId);
 
     jwplayerLoadVideo(videoId);
