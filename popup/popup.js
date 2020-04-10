@@ -72,12 +72,19 @@ function chat() {
             if (message.command == 'send info') {
                 console.log("get info");
 
-                if (message.username)
+                if (message.username) {
                     browser.storage.local.set({ username: message.username });
-                if (message.roomnum)
+                    document.getElementById("username").value = message.username;
+                } else {
+                    browser.storage.local.get('username', info => {
+                        document.getElementById("username").value = info['username'];
+                    });
+                }
+                if (message.roomnum) {
                     roomnum = message.roomnum;
+                    document.getElementById("roomnum").value = message.roomnum;
+                }
 
-                document.getElementById("inv_input").value = "vynchronize.herokuapp.com/" + roomnum;
             }
         });
         console.log("ask info");
@@ -85,24 +92,6 @@ function chat() {
             command: 'ask info'
         });
     });
-}
-
-function copyInvite() {
-    var copyText = document.getElementById("inv_input");
-    console.log(copyText);
-    copyText.select();
-    document.execCommand("Copy");
-    var tooltip = document.getElementById("myTooltip");
-    tooltip.innerHTML = "Copied!";
-}
-
-function outFunc() {
-    var tooltip = document.getElementById("myTooltip");
-    tooltip.innerHTML = "Copy to clipboard";
-}
-
-function randomroom() {
-    document.getElementById('roomnum').value = Math.random().toString(36).substr(2, 12);
 }
 
 function reportError(error) {
