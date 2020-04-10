@@ -7,7 +7,7 @@
         return;
     }
     window.hasRun = true;
-    
+
     browser.runtime.onMessage.addListener(message => {
         document.dispatchEvent(new CustomEvent(message.command, { detail: JSON.stringify(message) }));
     });

@@ -47,7 +47,7 @@ function chat() {
                 $username.val('');
             }
         });
-        
+
         browser.runtime.onMessage.addListener(message => {
             if (message.command == 'send info') {
                 console.log("get info");
