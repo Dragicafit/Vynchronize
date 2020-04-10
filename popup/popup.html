@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="utf-8">
@@ -30,11 +30,11 @@
                     <div class="form-group">
                         <p style="color:red; margin-bottom: 0px" id="missinginfo"></p>
                         <label for="username">Enter Name</label>
-                        <input class="form-control" id="username" />
+                        <input class="form-control" id="username" pattern="[\w-]+" />
                         <br />
                         <p style="color:red; margin-bottom: 0px" id="missinginfo2"></p>
                         <label for="roomnum">Enter Room ID</label>
-                        <input class="form-control" id="roomnum" />
+                        <input class="form-control" id="roomnum" pattern="[\w-]+" />
                         <br />
 
                         <input style="margin-top: 10px;" type="submit" class="btn btn-primary" value="Enter" />

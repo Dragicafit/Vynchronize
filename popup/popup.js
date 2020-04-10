@@ -47,27 +47,7 @@ function chat() {
                 $username.val('');
             }
         });
-
-
-        $('#roomnum').on('keypress', function (event) {
-            var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-            console.log(key);
-            console.log(event.keyCode);
-            
-            if ($roomnum.val().length > 50 || !nosymbols.test(key) && event.keyCode != 13 && event.keyCode != 32 && event.keyCode != 45 && event.keyCode != 95) {
-                event.preventDefault();
-                return false;
-            }
-        });
-
-        $('#username').on('keypress', function (event) {
-            var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-            if ($username.val().length > 30 || !nosymbols.test(key) && event.keyCode != 13 && event.keyCode != 32 && event.keyCode != 45 && event.keyCode != 95) {
-                event.preventDefault();
-                return false;
-            }
-        });
-
+        
         browser.runtime.onMessage.addListener(message => {
             if (message.command == 'send info') {
                 console.log("get info");
