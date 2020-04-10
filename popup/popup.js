@@ -34,12 +34,12 @@ function chat() {
                 var noname2 = document.getElementById('missinginfo2');
                 noname2.innerHTML = "Please enter a room ID without symbols or leading/trailing whitespace!";
             } else {
-                browser.tabs.sendMessage(tab,
+                chrome.tabs.sendMessage(tab,
                     {
                         command: 'new user',
                         username: $username.val(),
                     });
-                browser.tabs.sendMessage(tab,
+                chrome.tabs.sendMessage(tab,
                     {
                         command: 'new room',
                         roomnum: $roomnum.val()
@@ -48,15 +48,15 @@ function chat() {
             }
         });
 
-        browser.runtime.onMessage.addListener(message => {
+        chrome.runtime.onMessage.addListener(message => {
             if (message.command == 'send info') {
                 console.log("get info");
 
                 if (message.username) {
-                    browser.storage.local.set({ username: message.username });
+                    chrome.storage.local.set({ username: message.username });
                     document.getElementById("username").value = message.username;
                 } else {
-                    browser.storage.local.get('username', info => {
+                    chrome.storage.local.get(['username'], info => {
                         document.getElementById("username").value = info['username'];
                     });
                 }
@@ -68,7 +68,7 @@ function chat() {
             }
         });
         console.log("ask info");
-        browser.tabs.sendMessage(tab, {
+        chrome.tabs.sendMessage(tab, {
             command: 'ask info'
         });
     });
@@ -81,19 +81,19 @@ function reportError(error) {
 var listener = message => {
     if (message.command == 'scipt loaded') {
         console.log("scipt loaded");
-        browser.runtime.onMessage.removeListener(listener);
+        chrome.runtime.onMessage.removeListener(listener);
         chat();
     }
 };
-browser.runtime.onMessage.addListener(listener);
+chrome.runtime.onMessage.addListener(listener);
 
-browser.tabs.query({
+chrome.tabs.query({
     currentWindow: true,
     active: true,
     url: "*://*.wakanim.tv/*"
-}).then(tabs => {
+}, tabs => {
     if (tabs.length == 0) {
-        browser.tabs.create({ url: "https://www.wakanim.tv/" }).then(injectScript);
+        chrome.tabs.create({ url: "https://www.wakanim.tv/" }, injectScript);
     } else {
         injectScript(tabs[0]);
     }
@@ -102,12 +102,11 @@ browser.tabs.query({
 function injectScript(tabId) {
     console.log(tabId);
     tab = tabId.id;
-    browser.tabs.executeScript(tab, {
+    chrome.tabs.executeScript(tab, {
         runAt: "document_end",
         file: "/js/listener.js"
-    })
-        .catch(reportError);
-    browser.runtime.sendMessage({
+    });
+    chrome.runtime.sendMessage({
         command: 'createVideoClient',
         'tab': tab
     });

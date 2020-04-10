@@ -1,6 +1,6 @@
 var roomsTabs = {};
 
-browser.runtime.onMessage.addListener((message, sender) => {
+chrome.runtime.onMessage.addListener((message, sender) => {
     if (message.command == 'changeVideoClient') {
         console.log("change video client");
 
@@ -8,7 +8,7 @@ browser.runtime.onMessage.addListener((message, sender) => {
         if (roomsTabs[tabId] == null)
             return;
 
-        browser.tabs.update(tabId, { active: true, url: "https://www.wakanim.tv/" + message.location + "/v2/catalogue/episode/" + message.videoId });
+        chrome.tabs.update(tabId, { active: true, url: "https://www.wakanim.tv/" + message.location + "/v2/catalogue/episode/" + message.videoId });
     } else if (message.command == 'createVideoClient') {
         console.log("create video client");
 
@@ -18,7 +18,7 @@ browser.runtime.onMessage.addListener((message, sender) => {
 
         var tabId = sender.tab.id;
         if (message.username)
-            browser.storage.local.set({ username: message.username });
+            chrome.storage.local.set({ username: message.username });
         if (message.roomnum)
             roomsTabs[tabId] = message.roomnum;
     }
@@ -26,17 +26,17 @@ browser.runtime.onMessage.addListener((message, sender) => {
 
 function sendInfo(tabId) {
     console.log("send info");
-    browser.storage.local.get('username').then(item => {
-        browser.tabs.sendMessage(tabId,
+    chrome.storage.local.get(['username']).then(item => {
+        chrome.tabs.sendMessage(tabId,
             {
                 command: 'new user',
                 username: item['username'],
-            }).catch(reportError);
-        browser.tabs.sendMessage(tabId,
+            });
+        chrome.tabs.sendMessage(tabId,
             {
                 command: 'new room',
                 roomnum: roomsTabs[tabId]
-            }).catch(reportError);
+            });
     });
 }
 
@@ -44,21 +44,20 @@ function insertScript(tabId) {
     var listener = message => {
         if (message.command == 'scipt loaded') {
             console.log("scipt loaded");
-            browser.runtime.onMessage.removeListener(listener);
+            chrome.runtime.onMessage.removeListener(listener);
             sendInfo(tabId);
         }
     };
-    browser.runtime.onMessage.addListener(listener);
+    chrome.runtime.onMessage.addListener(listener);
 
     console.log("executeScript");
-    browser.tabs.executeScript(tabId, {
+    chrome.tabs.executeScript(tabId, {
         runAt: "document_end",
         file: "/js/listener.js"
-    })
-        .catch(reportError);
+    });
 }
 
-browser.tabs.onUpdated.addListener((tabId) => {
+chrome.tabs.onUpdated.addListener((tabId) => {
     if (roomsTabs[tabId] == null)
         return;
     console.log("updated");
