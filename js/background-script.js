@@ -27,17 +27,19 @@ browser.runtime.onMessage.addListener((message, sender) => {
 function sendInfo(tabId) {
     console.log("send info");
     browser.storage.local.get('username').then(item => {
+        if (item['username'] == null)
+            return;
         browser.tabs.sendMessage(tabId,
             {
                 command: 'new user',
                 username: item['username'],
             }).catch(reportError);
-        browser.tabs.sendMessage(tabId,
-            {
-                command: 'new room',
-                roomnum: roomsTabs[tabId]
-            }).catch(reportError);
     });
+    browser.tabs.sendMessage(tabId,
+        {
+            command: 'new room',
+            roomnum: roomsTabs[tabId]
+        }).catch(reportError);
 }
 
 function insertScript(tabId) {

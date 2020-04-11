@@ -57,6 +57,8 @@ function chat() {
                     document.getElementById("username").value = message.username;
                 } else {
                     browser.storage.local.get('username', info => {
+                        if (info['username'] == null)
+                            return;
                         document.getElementById("username").value = info['username'];
                     });
                 }
