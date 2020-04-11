@@ -56,10 +56,10 @@ function chat() {
                     chrome.storage.local.set({ username: message.username });
                     document.getElementById("username").value = message.username;
                 } else {
-                    chrome.storage.local.get(['username'], info => {
-                        if (info['username'] == null)
+                    chrome.storage.local.get(['username'], item => {
+                        if (item['username'] == null)
                             return;
-                        document.getElementById("username").value = info['username'];
+                        document.getElementById("username").value = item['username'];
                     });
                 }
                 if (message.roomnum) {
