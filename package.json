@@ -4,7 +4,7 @@
   "description": "Video synchronization app",
   "main": "server.js",
   "scripts": {
-    "release": "cd js && ./concat.ps1 && cd .. && zip -r -FS Release/Firefox/Wakanim-With-Friends.xpi manifest.json js/background-script.js js/listener.js js/script.js js/dependencies/* popup/*"
+    "release": "cd js && ./concat.ps1 && cd .. && crx3 -p Release/Chrome/Wakanim-With-Friends.pem -o Release/Chrome/Wakanim-With-Friends.crx manifest.json js/background-script.js js/listener.js js/script.js js/dependencies/* popup/*"
   },
   "repository": {
     "type": "git",
@@ -13,6 +13,7 @@
   "author": "Kyle Lim",
   "license": "ISC",
   "dependencies": {
+    "crx3": "^1.1.2",
     "dotenv": "8.1.0",
     "express": "*",
     "lodash": "^4.17.13",
