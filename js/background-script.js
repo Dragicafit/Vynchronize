@@ -26,18 +26,20 @@ chrome.runtime.onMessage.addListener((message, sender) => {
 
 function sendInfo(tabId) {
     console.log("send info");
-    chrome.storage.local.get(['username']).then(item => {
+    chrome.storage.local.get(['username'], item => {
+        if (item['username'] == null)
+            return;
         chrome.tabs.sendMessage(tabId,
             {
                 command: 'new user',
                 username: item['username'],
             });
-        chrome.tabs.sendMessage(tabId,
-            {
-                command: 'new room',
-                roomnum: roomsTabs[tabId]
-            });
     });
+    chrome.tabs.sendMessage(tabId,
+        {
+            command: 'new room',
+            roomnum: roomsTabs[tabId]
+        });
 }
 
 function insertScript(tabId) {
