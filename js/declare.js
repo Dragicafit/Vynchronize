@@ -1,3 +1,3 @@
-var socket = io.connect("https://54.38.185.173:3000/", { secure: true });
+var socket = io.connect("http://127.0.0.1:3000/");
 var roomnum = "";
 var id = "M7lc1UVf-VE";
