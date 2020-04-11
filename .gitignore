@@ -3,6 +3,7 @@ index_old.html
 app-env
 .env
 script.js
+package-lock.json
 
 # Ignore VScode
 
