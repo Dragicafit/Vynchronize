@@ -4,9 +4,9 @@ This extension allows you to enjoy your favorite anime on Wakanim with your frie
 
 ## Install
 
-- Firefox: Download the xpi release, go to about:debugging#/runtime/this-firefox, click on Load Temporay Add-on... and select the xpi file
+- Firefox: Download the [xpi release](https://github.com/Dragicafit/Wakanim-With-Friends/releases/download/v0.1-beta/Wakanim-With-Friends.xpi), go to about:debugging#/runtime/this-firefox, click on Load Temporay Add-on... and select the xpi file
 
-- Chrome: Download the crx release, go to chrome://extensions, enable debugging and drag the crx file
+- Chrome: Download the [crx release](https://github.com/Dragicafit/Wakanim-With-Friends/releases/download/v0.1-beta/Wakanim-With-Friends.crx), go to chrome://extensions, enable debugging and drag the crx file
 
 ## Developing or debugging
 
@@ -28,6 +28,6 @@ $ ./script
 ```
 Finaly load the extension in your browser:
 
-- Firefox: Go to [about:debugging#/runtime/this-firefox](about:debugging#/runtime/this-firefox), click on Load Temporay Add-on... and select the folder
+- Firefox: Go to about:debugging#/runtime/this-firefox, click on Load Temporay Add-on... and select the folder
 
-- Chrome: Go to [chrome://extensions](chrome://extensions), enable debugging, click on Load Unpacked and select the folder
+- Chrome: Go to chrome://extensions, enable debugging, click on Load Unpacked and select the folder
