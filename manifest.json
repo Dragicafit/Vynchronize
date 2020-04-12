@@ -1,8 +1,8 @@
 {
-  "description": "Sync wakanim videos",
+  "description": "Watch your favorite anime on Wakanim with your friends.",
   "manifest_version": 2,
   "name": "Wakanim With Friends",
-  "version": "1.0",
+  "version": "0.1",
   "homepage_url": "https://github.com/Dragicafit/Wakanim-With-Friends",
   "icons": {
     "16": "icons/wakanim-16x16.png",
