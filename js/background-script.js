@@ -59,7 +59,9 @@ function insertScript(tabId) {
     });
 }
 
-chrome.tabs.onUpdated.addListener((tabId) => {
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+    if (changeInfo.status != "complete")
+        return;
     if (roomsTabs[tabId] == null)
         return;
     console.log("updated");
