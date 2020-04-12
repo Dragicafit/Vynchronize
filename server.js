@@ -4,7 +4,7 @@
 require('dotenv').config();
 
 const app = require('express')();
-const server = require('http').createServer(options, app);
+const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const port = process.env.PORT || 3000;
 
