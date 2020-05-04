@@ -13,6 +13,8 @@ var connections = 0;
 var userrooms = {};
 var nosymbols = /^[\w-]+$/;
 
+process.title = 'WakanimWithFriends';
+
 server.listen(port, () => {
     console.log("Server listening at port %d", port);
 });
