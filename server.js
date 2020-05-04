@@ -54,6 +54,9 @@ io.on('connection', (socket) => {
         if (!nosymbols.test(data))
             return callback();
 
+        if (socket.username == null)
+            return callback();
+
         socket.roomnum = data;
         userrooms[socket.id] = socket.roomnum;
 
