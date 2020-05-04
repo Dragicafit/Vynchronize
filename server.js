@@ -53,46 +53,38 @@ io.on('connection', (socket) => {
             return callback();
 
         socket.roomnum = data;
-        userrooms[socket.id] = data;
+        userrooms[socket.id] = socket.roomnum;
 
-        var host = null;
-        var init = false;
+        var init = io.sockets.adapter.rooms['room-' + socket.roomnum] == null;
 
-        var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
-
-        if (room == null || room.host == null) {
-            socket.send(socket.id);
-            host = socket.id;
-            init = true;
-        } else {
-            console.log(socket.roomnum);
-            host = room.host;
-        }
-
-        console.log(socket.username + " connected to room-" + socket.roomnum);
         socket.join("room-" + socket.roomnum, (err) => {
             if (err)
                 return console.error("join fail");
+            console.log(socket.username + " connected to room-" + socket.roomnum);
 
-            room = io.sockets.adapter.rooms['room-' + socket.roomnum];
-            if (init) {
-                room.host = host;
-                room.currVideo = '11396';
+            var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
+            if (room.host == null) {
+                room.host = socket.id;
                 room.hostName = socket.username;
+
+                io.sockets.in("room-" + socket.roomnum).emit('changeHostLabel', {
+                    username: room.hostName
+                });
+            }
+            if (init) {
+                room.currVideo = '11396';
                 room.users = [socket.username];
             }
-            io.sockets.in("room-" + socket.roomnum).emit('changeHostLabel', {
-                username: room.hostName
-            });
 
-            io.sockets.in("room-" + socket.roomnum).emit('createJwplayer', {});
+            if (socket.id != room.host) {
+                console.log("call the damn host " + room.host);
 
-            if (socket.id != host) {
-                console.log("call the damn host " + host);
                 setTimeout(function () {
-                    socket.broadcast.to(host).emit('getData');
+                    socket.broadcast.to(room.host).emit('getData');
                 }, 1000);
-                room.users.push(socket.username);
+
+                if (!room.users.includes(socket.username))
+                    room.users.push(socket.username);
 
                 socket.emit('changeVideoClient', {
                     videoId: room.currVideo
@@ -103,7 +95,7 @@ io.on('connection', (socket) => {
             updateRoomUsers(socket.roomnum);
             callback({
                 roomnum: socket.roomnum,
-                host: init
+                host: socket.id == room.host
             });
         });
     });
