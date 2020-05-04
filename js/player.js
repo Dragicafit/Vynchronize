@@ -1,4 +1,4 @@
-socket.on('getPlayerData', function (data) {
+socket.on('getPlayerData', data => {
     var roomnum = data.room;
     var caller = data.caller;
 

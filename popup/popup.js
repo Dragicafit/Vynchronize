@@ -10,7 +10,7 @@ function chat() {
         var $username = $('#username');
         var $roomnum = $('#roomnum');
 
-        $userForm.submit(function (e) {
+        $userForm.submit(e => {
             e.preventDefault();
             if ($username.val() == "") {
                 console.log("ENTER A NAME");

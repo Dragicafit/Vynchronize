@@ -5,7 +5,7 @@ if (typeof jwplayer !== 'undefined') {
         });
     }
 
-    socket.on('justPlay', function (data) {
+    socket.on('justPlay', _ => {
         console.log("currPlayer");
         jwplayer().play();
     });
@@ -16,7 +16,7 @@ if (typeof jwplayer !== 'undefined') {
         });
     }
 
-    socket.on('justPause', function (data) {
+    socket.on('justPause', _ => {
         console.log("hiIamPausing!");
         jwplayer().pause();
     });
@@ -28,7 +28,7 @@ if (typeof jwplayer !== 'undefined') {
         });
     }
 
-    socket.on('justSeek', function (data) {
+    socket.on('justSeek', data => {
         console.log("Seeking Event!");
         currTime = data.time;
         var clientTime = jwplayer().getPosition();

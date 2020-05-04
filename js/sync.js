@@ -70,12 +70,12 @@ function changeVideoId(roomnum, id) {
     });
 }
 
-socket.on('getData', function (data) {
+socket.on('getData', data => {
     console.log("Hi im the host, you called?");
     socket.emit('sync host', {});
 });
 
-socket.on('syncVideoClient', function (data) {
+socket.on('syncVideoClient', data => {
     if (host)
         return;
     var currTime = data.time;
@@ -96,7 +96,7 @@ socket.on('syncVideoClient', function (data) {
     }
 });
 
-socket.on('changeVideoClient', function (data) {
+socket.on('changeVideoClient', data => {
     var videoId = data.videoId;
     id = videoId;
     console.log("video id is: " + videoId);

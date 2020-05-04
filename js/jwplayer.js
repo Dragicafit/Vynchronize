@@ -1,5 +1,5 @@
 if (typeof jwplayer !== 'undefined') {
-    jwplayer().on('play', function (e) {
+    jwplayer().on('play', e => {
         console.log('jwplayer playing', e);
         if (host) {
             currTime = jwplayer().getPosition();
@@ -12,7 +12,7 @@ if (typeof jwplayer !== 'undefined') {
         }
     });
 
-    jwplayer().on('pause', function (e) {
+    jwplayer().on('pause', e => {
         console.log('jwplayer pausing', e);
         if (host) {
             currTime = jwplayer().getPosition();
@@ -21,7 +21,7 @@ if (typeof jwplayer !== 'undefined') {
         }
     });
 
-    jwplayer().on('seek', function (e) {
+    jwplayer().on('seek', e => {
         console.log('jwplayer seeking', e);
         if (host) {
             currTime = e.offset;

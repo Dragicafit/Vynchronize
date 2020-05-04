@@ -15,15 +15,15 @@ var nosymbols = /^[\w-]+$/;
 
 process.title = 'WakanimWithFriends';
 
-server.listen(port, () => {
+server.listen(port, _ => {
     console.log("Server listening at port %d", port);
 });
 
-io.on('connection', (socket) => {
+io.on('connection', socket => {
     connections++;
     console.log("Connected: %s sockets connected", connections);
 
-    socket.on('disconnect', function (data) {
+    socket.on('disconnect', data => {
         connections--;
         console.log(socket.id + "Disconnected: %s sockets connected", connections);
 
@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
         delete userrooms[id];
     });
 
-    socket.on('new room', function (data, callback) {
+    socket.on('new room', (data, callback) => {
         console.log("New room");
         if (!nosymbols.test(data))
             return callback();
@@ -62,7 +62,7 @@ io.on('connection', (socket) => {
 
         var init = io.sockets.adapter.rooms['room-' + socket.roomnum] == null;
 
-        socket.join("room-" + socket.roomnum, (err) => {
+        socket.join("room-" + socket.roomnum, err => {
             if (err)
                 return console.error("join fail");
             console.log(socket.username + " connected to room-" + socket.roomnum);
@@ -84,7 +84,7 @@ io.on('connection', (socket) => {
             if (socket.id != room.host) {
                 console.log("call the damn host " + room.host);
 
-                setTimeout(function () {
+                setTimeout(_ => {
                     socket.broadcast.to(room.host).emit('getData');
                 }, 1000);
 
@@ -105,7 +105,7 @@ io.on('connection', (socket) => {
         });
     });
 
-    socket.on('play other', function () {
+    socket.on('play other', _ => {
         if (socket.roomnum == null)
             return;
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
@@ -117,7 +117,7 @@ io.on('connection', (socket) => {
         socket.broadcast.to("room-" + socket.roomnum).emit('justPlay');
     });
 
-    socket.on('pause other', function () {
+    socket.on('pause other', _ => {
         if (socket.roomnum == null)
             return;
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
@@ -129,7 +129,7 @@ io.on('connection', (socket) => {
         socket.broadcast.to("room-" + socket.roomnum).emit('justPause');
     });
 
-    socket.on('seek other', function (data) {
+    socket.on('seek other', data => {
         if (socket.roomnum == null)
             return;
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
@@ -144,7 +144,7 @@ io.on('connection', (socket) => {
         });
     });
 
-    socket.on('sync video', function (data) {
+    socket.on('sync video', data => {
         if (socket.roomnum == null)
             return;
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
@@ -163,7 +163,7 @@ io.on('connection', (socket) => {
         });
     });
 
-    socket.on('change video', function (data) {
+    socket.on('change video', data => {
         if (socket.roomnum == null)
             return;
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
@@ -178,7 +178,7 @@ io.on('connection', (socket) => {
         });
     });
 
-    socket.on('new user', function (data, callback) {
+    socket.on('new user', (data, callback) => {
         console.log("New user");
         if (!nosymbols.test(data))
             return callback();
@@ -193,7 +193,7 @@ io.on('connection', (socket) => {
         });
     });
 
-    socket.on('sync host', function () {
+    socket.on('sync host', _ => {
         if (socket.roomnum == null)
             return;
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
@@ -204,7 +204,7 @@ io.on('connection', (socket) => {
         socket.emit('syncHost');
     });
 
-    /*socket.on('change host', function (data) {
+    /*socket.on('change host', data=> {
         if (socket.roomnum == null)
             return;
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
@@ -231,7 +231,7 @@ io.on('connection', (socket) => {
         }
     });
 */
-    socket.on('get host data', function (data) {
+    socket.on('get host data', _ => {
         if (socket.roomnum == null)
             return;
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
