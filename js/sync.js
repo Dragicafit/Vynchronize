@@ -51,7 +51,7 @@ function changeVideo(roomnum, rawId) {
     if (videoId != "invalid") {
         var time = getTime();
         console.log("The time is this man: " + time);
-        socket.emit('change video', {
+        socket.emit('changeVideoServer', {
             room: roomnum,
             videoId: videoId,
             time: time
@@ -64,7 +64,7 @@ function changeVideo(roomnum, rawId) {
 
 function changeVideoId(roomnum, id) {
     document.getElementById("inputVideoId").innerHTML = id;
-    socket.emit('change video', {
+    socket.emit('changeVideoServer', {
         room: roomnum,
         videoId: id
     });
@@ -72,28 +72,7 @@ function changeVideoId(roomnum, id) {
 
 socket.on('getData', data => {
     console.log("Hi im the host, you called?");
-    socket.emit('sync host', {});
-});
-
-socket.on('syncVideoClient', data => {
-    if (host)
-        return;
-    var currTime = data.time;
-    var state = data.state;
-    var videoId = data.videoId;
-    console.log("current time is: " + currTime);
-    console.log("curr vid id: " + id + " " + videoId);
-    console.log("state" + state);
-
-    var clientTime = jwplayer().getPosition();
-    if (clientTime < currTime - .1 || clientTime > currTime + .1)
-        jwplayer().seek(currTime);
-
-    if (state) {
-        jwplayer().pause();
-    } else {
-        jwplayer().play();
-    }
+    socket.emit('syncClient');
 });
 
 socket.on('changeVideoClient', data => {

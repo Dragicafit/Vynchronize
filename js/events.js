@@ -1,39 +1,30 @@
 if (typeof jwplayer !== 'undefined') {
-    function playOther(roomnum) {
-        socket.emit('play other', {
-            room: roomnum
+    function seekOther(currTime, state) {
+        socket.emit('changeStateServer', {
+            time: currTime,
+            state: state
         });
     }
 
-    socket.on('justPlay', _ => {
-        console.log("currPlayer");
-        jwplayer().play();
-    });
-
-    function pauseOther(roomnum) {
-        socket.emit('pause other', {
-            room: roomnum
-        });
-    }
-
-    socket.on('justPause', _ => {
-        console.log("hiIamPausing!");
-        jwplayer().pause();
-    });
-
-    function seekOther(roomnum, currTime) {
-        socket.emit('seek other', {
-            room: roomnum,
-            time: currTime
-        });
-    }
-
-    socket.on('justSeek', data => {
-        console.log("Seeking Event!");
-        currTime = data.time;
+    socket.on('changeStateClient', data => {
+        var currTime = data.time;
+        var state = data.state;
         var clientTime = jwplayer().getPosition();
+        var clientState = isPause();
+
+        console.log("current time is: " + currTime);
+        console.log("current state is: " + state);
+
         if (clientTime < currTime - .2 || clientTime > currTime + .2) {
             jwplayer().seek(currTime);
         }
+
+        if (clientState == state)
+            return;
+        if (state)
+            jwplayer().pause();
+        else
+            jwplayer().play();
+
     });
 }

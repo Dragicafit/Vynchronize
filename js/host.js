@@ -13,7 +13,7 @@ socket.on('unSetHost', _ => {
 
 socket.on('getData', _ => {
     console.log("Hi im the host, you called?");
-    socket.emit('sync host', {});
+    socket.emit('syncClient');
 });
 
 if (typeof jwplayer !== 'undefined') {
@@ -37,15 +37,6 @@ socket.on('autoHost', data => {
 function getHostData(roomnum) {
     socket.emit('get host data', {
         room: roomnum
-    });
-}
-if (typeof jwplayer !== 'undefined') {
-    socket.on('compareHost', data => {
-        var hostTime = data.currTime;
-
-        var currTime = jwplayer().getPosition();
-
-        console.log("curr: " + currTime + " Host: " + hostTime);
     });
 }
 

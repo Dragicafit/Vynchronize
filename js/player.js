@@ -3,7 +3,7 @@ socket.on('getPlayerData', data => {
     var caller = data.caller;
 
     var currTime = jwplayer().getPosition();
-    var state = jwplayer().getState() !== 'playing';
+    var state = isPause();
 
     socket.emit('get host data', {
         room: roomnum,
