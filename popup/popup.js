@@ -1,6 +1,6 @@
 var roomnum = "";
 var tab;
-var nosymbols = /^[\w-]+$/;
+var nosymbols = /^[\w-]{5,30}$/;
 
 function chat() {
     $(function () {
@@ -8,37 +8,51 @@ function chat() {
         var $username = $('#username');
         var $roomnum = $('#roomnum');
 
-        $userForm.submit(e => {
+        function check() {
+            this.setCustomValidity('');
+
+            var value = $(this).val();
+
+            if (value == "") {
+                this.setCustomValidity('Enter a value');
+                return;
+            }
+            if (value.length > 30) {
+                this.setCustomValidity("30 characters max");
+                return;
+            }
+            if (value.length < 5) {
+                this.setCustomValidity("5 characters min");
+                return;
+            }
+            if (!nosymbols.test(value)) {
+                this.setCustomValidity("0-9, a-Z and - only");
+                return;
+            }
+        }
+
+        $username.on("input", check);
+        $roomnum.on("input", check);
+
+        $userForm.submit((e) => {
             e.preventDefault();
-            if ($username.val() == "") {
-                console.log("ENTER A NAME");
-                var noname = document.getElementById('missinginfo');
-                noname.innerHTML = "Surely you have a name right? Enter it below!";
+
+            var newUser = $username.val();
+            var newRoom = $roomnum.val();
+
+            if (!nosymbols.test(newUser)) {
+                console.log("ENTER A PROPER NAME");
+                return;
             }
-            else if ($username.val().length > 30) {
-                console.log("NAME IS TOO LONG");
-                var noname = document.getElementById('missinginfo');
-                noname.innerHTML = "Your name can't possibly be over 30 characters!";
+            if (!nosymbols.test(newRoom)) {
+                console.log("ENTER A PROPER ROOM");
+                return;
             }
-            else if ($roomnum.val().length > 50) {
-                console.log("ROOM NAME IS TOO LONG");
-                var noname = document.getElementById('missinginfo');
-                noname.innerHTML = "How are you going to remember a room code that has more than 50 characters?";
-            }
-            else if (!nosymbols.test($roomnum.val())) {
-                console.log("ENTER A PROPER ROOMNUMBER");
-                var noname = document.getElementById('missinginfo');
-                noname.innerHTML = "";
-                var noname2 = document.getElementById('missinginfo2');
-                noname2.innerHTML = "Please enter a room ID without symbols or leading/trailing whitespace!";
-            } else {
-                browser.tabs.sendMessage(tab, {
-                    command: 'joinRoom',
-                    roomnum: $roomnum.val(),
-                    username: $username.val()
-                });
-                $username.val('');
-            }
+            browser.tabs.sendMessage(tab, {
+                command: 'joinRoom',
+                roomnum: newRoom,
+                username: newUser
+            });
         });
 
         browser.runtime.onMessage.addListener(message => {

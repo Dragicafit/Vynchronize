@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000;
 var users = [];
 var connections = 0;
 var userrooms = {};
-var nosymbols = /^[\w-]+$/;
+var nosymbols = /^[\w-]{5,30}$/;
 
 process.title = 'WakanimWithFriends';
 
