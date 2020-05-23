@@ -1,37 +1,25 @@
-document.addEventListener('new room', e => {
+document.addEventListener('joinRoom', e => {
     var data = JSON.parse(e.detail);
-    socket.emit('new room', data.roomnum, data2 => {
-        if (data2) {
-            roomnum = data2.roomnum;
-            host = data2.host;
-            if (host) {
-                console.log("You are the new host!");
-                changeVideoParse(roomnum);
-            }
+    socket.emit('joinRoom', data, data2 => {
+        if (!data2) return;
 
-            console.log("send room number after new room " + roomnum);
-            document.dispatchEvent(new CustomEvent('send info', {
-                detail: JSON.stringify({
-                    roomnum: roomnum
-                })
-            }));
+        roomnum = data2.roomnum;
+        username = data2.username;
+        host = data2.host;
+
+        if (host) {
+            console.log("You are the new host!");
+            changeVideoParse(roomnum);
         }
-    });
-});
+        console.log("send user name after new user " + username);
+        console.log("send room number after joinRoom " + roomnum);
 
-document.addEventListener('new user', e => {
-    var data = JSON.parse(e.detail);
-    socket.emit('new user', data.username, data2 => {
-        if (data2) {
-            username = data2.username;
-
-            console.log("send user name after new user " + username);
-            document.dispatchEvent(new CustomEvent('send info', {
-                detail: JSON.stringify({
-                    username: username
-                })
-            }));
-        }
+        document.dispatchEvent(new CustomEvent('send info', {
+            detail: JSON.stringify({
+                roomnum: roomnum,
+                username: username
+            })
+        }));
     });
 });
 

@@ -50,15 +50,21 @@ io.on('connection', socket => {
         delete userrooms[id];
     });
 
-    socket.on('new room', (data, callback) => {
-        console.log("New room");
-        if (!nosymbols.test(data))
+    socket.on('joinRoom', (data, callback) => {
+        console.log("Join room");
+
+        if (typeof data.roomnum != 'string' || !nosymbols.test(data.roomnum))
             return callback();
 
-        if (socket.username == null)
-            return callback();
+        if (socket.username == null) {
+            if (typeof data.username != 'string' || !nosymbols.test(data.username))
+                return callback();
+            socket.username = data.username;
+            if (!users.includes(socket.username))
+                users.push(socket.username);
+        }
 
-        socket.roomnum = data;
+        socket.roomnum = data.roomnum;
         userrooms[socket.id] = socket.roomnum;
 
         var init = io.sockets.adapter.rooms['room-' + socket.roomnum] == null;
@@ -100,7 +106,8 @@ io.on('connection', socket => {
             updateRoomUsers(socket.roomnum);
             callback({
                 roomnum: socket.roomnum,
-                host: socket.id == room.host
+                host: socket.id == room.host,
+                username: socket.username
             });
         });
     });
@@ -138,21 +145,6 @@ io.on('connection', socket => {
         });
     });
 
-    socket.on('new user', (data, callback) => {
-        console.log("New user");
-        if (!nosymbols.test(data))
-            return callback();
-
-        if (!socket.username) {
-            socket.username = data;
-            if (!users.includes(socket.username))
-                users.push(socket.username);
-        }
-        callback({
-            username: socket.username
-        });
-    });
-
     socket.on('syncClient', _ => {
         if (socket.roomnum == null)
             return;
@@ -182,25 +174,25 @@ io.on('connection', socket => {
            return;
         if (socket.id != room.host)
             return;
-
+    
         console.log(io.sockets.adapter.rooms['room-' + socket.roomnum]);
         var newHost = socket.id;
         var currHost = io.sockets.adapter.rooms['room-' + socket.roomnum].host;
-
+    
         if (newHost != currHost) {
             console.log("I want to be the host and my socket id is: " + newHost);
-
+    
             socket.broadcast.to(currHost).emit('unSetHost');
             io.sockets.adapter.rooms['room-' + socket.roomnum].host = newHost;
             socket.emit('setHost');
-
+    
             io.sockets.adapter.rooms['room-' + socket.roomnum].hostName = socket.username;
             io.sockets.to("room-" + roomnum).emit('changeHostLabel', {
                 username: socket.username
             });
         }
     });
-*/
+    */
 
     function updateRoomUsers() {
         if (socket.roomnum == null)

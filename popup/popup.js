@@ -4,8 +4,6 @@ var nosymbols = /^[\w-]+$/;
 
 function chat() {
     $(function () {
-        var $roomArea = $('#roomArea');
-        var $userFormArea = $('#userFormArea');
         var $userForm = $('#userForm');
         var $username = $('#username');
         var $roomnum = $('#roomnum');
@@ -34,16 +32,11 @@ function chat() {
                 var noname2 = document.getElementById('missinginfo2');
                 noname2.innerHTML = "Please enter a room ID without symbols or leading/trailing whitespace!";
             } else {
-                browser.tabs.sendMessage(tab,
-                    {
-                        command: 'new user',
-                        username: $username.val(),
-                    });
-                browser.tabs.sendMessage(tab,
-                    {
-                        command: 'new room',
-                        roomnum: $roomnum.val()
-                    });
+                browser.tabs.sendMessage(tab, {
+                    command: 'joinRoom',
+                    roomnum: $roomnum.val(),
+                    username: $username.val()
+                });
                 $username.val('');
             }
         });
