@@ -25,17 +25,17 @@ if (typeof jwplayer !== 'undefined') {
         currTime = e.offset;
         seekOther(currTime, isPause());
     });
+}
 
-    function isPause() {
-        return jwplayer().getState() != 'playing';
-    }
+function isPause() {
+    return jwplayer().getState() !== 'playing';
 }
 
 function jwplayerLoadVideo(videoId) {
     console.log("changing video to: " + videoId);
     var pathname = window.location.pathname.match(parseUrlWakanim);
 
-    if (pathname[2] == videoId)
+    if (pathname[2] === videoId)
         return;
 
     document.dispatchEvent(new CustomEvent('changeVideoClient', {

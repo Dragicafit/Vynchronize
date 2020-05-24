@@ -38,7 +38,7 @@ io.on('connection', socket => {
         var room = io.sockets.adapter.rooms['room-' + roomnum];
 
         if (room != null) {
-            if (socket.id == room.host) {
+            if (socket.id === room.host) {
                 room.host = undefined;
             }
             const index = room.users.indexOf(socket.username);
@@ -53,11 +53,11 @@ io.on('connection', socket => {
     socket.on('joinRoom', (data, callback) => {
         console.log("Join room");
 
-        if (typeof data.roomnum != 'string' || !nosymbols.test(data.roomnum))
+        if (typeof data.roomnum !== 'string' || !nosymbols.test(data.roomnum))
             return callback();
 
         if (socket.username == null) {
-            if (typeof data.username != 'string' || !nosymbols.test(data.username))
+            if (typeof data.username !== 'string' || !nosymbols.test(data.username))
                 return callback();
             socket.username = data.username;
             if (!users.includes(socket.username))
@@ -91,7 +91,9 @@ io.on('connection', socket => {
                 room.lastChange = performance.now();
             }
 
-            if (socket.id != room.host) {
+            if (socket.id === room.host) {
+                console.log("I am the host");
+            } else {
                 console.log("call the damn host " + room.hostName);
 
                 setTimeout(_ => {
@@ -100,13 +102,12 @@ io.on('connection', socket => {
 
                 if (!room.users.includes(socket.username))
                     room.users.push(socket.username);
-            } else {
-                console.log("I am the host");
             }
+
             updateRoomUsers(socket.roomnum);
             callback({
                 roomnum: socket.roomnum,
-                host: socket.id == room.host,
+                host: socket.id === room.host,
                 username: socket.username
             });
         });
@@ -118,7 +119,7 @@ io.on('connection', socket => {
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
         if (room == null)
             return;
-        if (socket.id != room.host)
+        if (socket.id !== room.host)
             return;
 
         room.currTime = data.time;
@@ -136,7 +137,7 @@ io.on('connection', socket => {
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
         if (room == null)
             return;
-        if (socket.id != room.host)
+        if (socket.id !== room.host)
             return;
 
         room.currVideo = data.videoId;
@@ -151,7 +152,7 @@ io.on('connection', socket => {
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
         if (room == null)
             return;
-        if (socket.id == room.host)
+        if (socket.id === room.host)
             return;
 
         var currTime = room.currTime;
@@ -172,14 +173,14 @@ io.on('connection', socket => {
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
         if (room == null)
            return;
-        if (socket.id != room.host)
+        if (socket.id !== room.host)
             return;
     
         console.log(io.sockets.adapter.rooms['room-' + socket.roomnum]);
         var newHost = socket.id;
         var currHost = io.sockets.adapter.rooms['room-' + socket.roomnum].host;
     
-        if (newHost != currHost) {
+        if (newHost !== currHost) {
             console.log("I want to be the host and my socket id is: " + newHost);
     
             socket.broadcast.to(currHost).emit('unSetHost');

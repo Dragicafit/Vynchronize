@@ -32,7 +32,9 @@ function changeVideoParse(roomnum) {
 
 function changeVideo(roomnum, videoId) {
     console.log("change video to " + videoId);
-    if (videoId != "invalid") {
+    if (videoId == null) {
+        console.log("User entered an invalid video url :(");
+    } else {
         var time = getTime();
         console.log("The time is this man: " + time);
         socket.emit('changeVideoServer', {
@@ -40,9 +42,6 @@ function changeVideo(roomnum, videoId) {
             videoId: videoId,
             time: time
         });
-    } else {
-        console.log("User entered an invalid video url :(");
-        invalidURL();
     }
 }
 

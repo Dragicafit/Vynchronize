@@ -13,7 +13,7 @@ function chat() {
 
             var value = $(this).val();
 
-            if (value == "") {
+            if (value === "") {
                 this.setCustomValidity('Enter a value');
                 return;
             }
@@ -56,7 +56,7 @@ function chat() {
         });
 
         browser.runtime.onMessage.addListener(message => {
-            if (message.command == 'send info') {
+            if (message.command === 'send info') {
                 console.log("get info");
 
                 if (message.username) {
@@ -88,7 +88,7 @@ function reportError(error) {
 }
 
 var listener = message => {
-    if (message.command == 'scipt loaded') {
+    if (message.command === 'scipt loaded') {
         console.log("scipt loaded");
         browser.runtime.onMessage.removeListener(listener);
         chat();
@@ -101,7 +101,7 @@ browser.tabs.query({
     active: true,
     url: "*://*.wakanim.tv/*"
 }).then(tabs => {
-    if (tabs.length == 0) {
+    if (tabs.length === 0) {
         browser.tabs.create({ url: "https://www.wakanim.tv/" }).then(injectScript);
     } else {
         injectScript(tabs[0]);
