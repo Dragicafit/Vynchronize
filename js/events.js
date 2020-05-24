@@ -6,18 +6,14 @@ function seekOther(currTime, state) {
 }
 
 socket.on('changeStateClient', data => {
-    var currTime = data.time;
-    var state = data.state;
     var clientTime = getTime();
-    var clientState = isPlay();
 
     console.log("current time is: " + clientTime);
-    console.log("current time server is: " + currTime);
-    console.log("current state is: " + clientState);
-    console.log("current state server is: " + state);
+    console.log("current time server is: " + data.time);
+    console.log("current state server is: " + data.state);
 
-    setState(state);
+    setState(data.state);
 
-    if (clientTime < currTime - .2 || clientTime > currTime + .2)
-        seekTo(currTime);
+    if (clientTime < data.time - .2 || clientTime > data.state + .2)
+        seekTo(data.state);
 });

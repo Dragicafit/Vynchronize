@@ -33,8 +33,7 @@ io.on('connection', socket => {
             users.splice(index, 1);
         }
 
-        var id = socket.id;
-        var roomnum = userrooms[id];
+        var roomnum = userrooms[socket.id];
         var room = io.sockets.adapter.rooms['room-' + roomnum];
 
         if (room != null) {
@@ -47,7 +46,7 @@ io.on('connection', socket => {
                 updateRoomUsers(roomnum);
             }
         }
-        delete userrooms[id];
+        delete userrooms[socket.id];
     });
 
     socket.on('joinRoom', (data, callback) => {
@@ -157,11 +156,10 @@ io.on('connection', socket => {
         if (socket.id === room.host)
             return;
 
-        var currTime = room.currTime;
         if (room.state)
-            currTime += (performance.now() - room.lastChange) / 1000;
+            room.currTime += (performance.now() - room.lastChange) / 1000;
         socket.emit('changeStateClient', {
-            time: currTime,
+            time: room.currTime,
             state: room.state
         });
         if (room.currVideo == null)

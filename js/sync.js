@@ -1,14 +1,13 @@
 function syncVideo(roomnum) {
     var currTime = getTime();
     var state = isPlay();
-    var videoId = id;
     console.log("I am host and my current time is " + currTime + state);
 
     socket.emit('sync video', {
         room: roomnum,
         time: currTime,
         state: state,
-        videoId: videoId
+        videoId: id
     });
 }
 
@@ -23,6 +22,7 @@ function changeVideoParse(roomnum) {
 
 function changeVideo(roomnum, videoId) {
     console.log("change video to " + videoId);
+
     var time = getTime();
     console.log("The time is this man: " + time);
     socket.emit('changeVideoServer', {
@@ -38,18 +38,17 @@ socket.on('getData', _ => {
 });
 
 socket.on('changeVideoClient', data => {
-    console.log("video id is: " + videoId);
-    var videoId = data.videoId;
-    id = videoId;
+    console.log("video id is: " + data.videoId);
+    id = data.videoId;
 
     var pathname = window.location.href.match(parseUrlWakanim);
 
-    if (pathname != null && pathname[2] === videoId)
+    if (pathname != null && pathname[2] === data.videoId)
         return;
 
     document.dispatchEvent(new CustomEvent('changeVideoClient', {
         detail: JSON.stringify({
-            videoId: videoId,
+            videoId: data.videoId,
             location: pathname[1] ? pathname[1] : "fr"
         })
     }));
