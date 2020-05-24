@@ -12,21 +12,12 @@
         document.dispatchEvent(new CustomEvent(message.command, { detail: JSON.stringify(message) }));
     });
 
-    document.addEventListener('send info', e => {
-        var data = JSON.parse(e.detail);
-        browser.runtime.sendMessage({
-            command: 'send info',
-            username: data.username,
-            roomnum: data.roomnum
-        });
-    });
-
-    document.addEventListener('changeVideoClient', e => {
-        var data = JSON.parse(e.detail);
-        browser.runtime.sendMessage({
-            command: 'changeVideoClient',
-            videoId: data.videoId,
-            location: data.location
+    var redirects = ['send info', 'changeVideoClient'];
+    redirects.forEach(redirect => {
+        document.addEventListener(redirect, e => {
+            var data = JSON.parse(e.detail);
+            data.command = redirect;
+            browser.runtime.sendMessage(data);
         });
     });
 
