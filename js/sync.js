@@ -1,6 +1,6 @@
 function syncVideo(roomnum) {
     var currTime = getTime();
-    var state = isPause();
+    var state = isPlay();
     var videoId = id;
     console.log("I am host and my current time is " + currTime + state);
 

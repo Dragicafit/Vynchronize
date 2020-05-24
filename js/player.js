@@ -3,7 +3,7 @@ socket.on('getPlayerData', data => {
     var caller = data.caller;
 
     var currTime = getTime();
-    var state = isPause();
+    var state = isPlay();
 
     socket.emit('get host data', {
         room: roomnum,

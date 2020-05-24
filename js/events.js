@@ -9,7 +9,7 @@ socket.on('changeStateClient', data => {
     var currTime = data.time;
     var state = data.state;
     var clientTime = getTime();
-    var clientState = isPause();
+    var clientState = isPlay();
 
     console.log("current time is: " + currTime);
     console.log("current state is: " + state);

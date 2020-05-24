@@ -23,7 +23,7 @@ if (typeof jwplayer !== 'undefined') {
         if (!host)
             return;
         currTime = e.offset;
-        seekOther(currTime, isPause());
+        seekOther(currTime, isPlay());
     });
 }
 
@@ -33,10 +33,10 @@ function getTime() {
     return jwplayer().getPosition();
 }
 
-function isPause() {
+function isPlay() {
     if (typeof jwplayer !== 'undefined')
         return false;
-    return jwplayer().getState() !== 'playing';
+    return jwplayer().getState() === 'playing';
 }
 
 function seekTo(time) {
@@ -45,13 +45,13 @@ function seekTo(time) {
     jwplayer().seek(time);
 }
 
-function setState(pause) {
+function setState(state) {
     if (typeof jwplayer !== 'undefined')
         return;
-    if (pause)
-        jwplayer().pause();
-    else
+    if (state)
         jwplayer().play();
+    else
+        jwplayer().pause();
 }
 
 function jwplayerLoadVideo(videoId) {

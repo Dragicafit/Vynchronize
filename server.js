@@ -86,7 +86,7 @@ io.on('connection', socket => {
             if (init) {
                 room.currVideo = '11396';
                 room.users = [socket.username];
-                room.state = 1;
+                room.state = false;
                 room.currTime = 0;
                 room.lastChange = performance.now();
             }
@@ -156,7 +156,7 @@ io.on('connection', socket => {
             return;
 
         var currTime = room.currTime;
-        if (!room.state)
+        if (room.state)
             currTime += (performance.now() - room.lastChange) / 1000;
         socket.emit('changeStateClient', {
             time: currTime,
