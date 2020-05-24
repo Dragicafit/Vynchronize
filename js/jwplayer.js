@@ -28,25 +28,25 @@ if (typeof jwplayer !== 'undefined') {
 }
 
 function getTime() {
-    if (typeof jwplayer !== 'undefined')
+    if (typeof jwplayer === 'undefined')
         return 0;
     return jwplayer().getPosition();
 }
 
 function isPlay() {
-    if (typeof jwplayer !== 'undefined')
+    if (typeof jwplayer === 'undefined')
         return false;
     return jwplayer().getState() === 'playing';
 }
 
 function seekTo(time) {
-    if (typeof jwplayer !== 'undefined')
+    if (typeof jwplayer === 'undefined')
         return;
     jwplayer().seek(time);
 }
 
 function setState(state) {
-    if (typeof jwplayer !== 'undefined')
+    if (typeof jwplayer === 'undefined')
         return;
     if (state)
         jwplayer().play();

@@ -15,8 +15,6 @@ socket.on('getData', _ => {
 });
 
 socket.on('syncHost', _ => {
-    if (typeof jwplayer !== 'undefined')
-        return;
     syncVideo(roomnum);
 });
 
