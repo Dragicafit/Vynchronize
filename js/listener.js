@@ -26,9 +26,7 @@
         browser.runtime.sendMessage({
             command: 'changeVideoClient',
             videoId: data.videoId,
-            location: data.location,
-            username: data.username,
-            roomnum: data.roomnum
+            location: data.location
         });
     });
 

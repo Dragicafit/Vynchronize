@@ -13,8 +13,8 @@ function syncVideo(roomnum) {
 }
 
 function idParse() {
-    var pathname = window.location.pathname.match(parseUrlWakanim);
-    return pathname[2];
+    var pathname = window.location.href.match(parseUrlWakanim);
+    return pathname != null ? pathname[2] : null;
 }
 
 function changeVideoParse(roomnum) {
@@ -23,17 +23,13 @@ function changeVideoParse(roomnum) {
 
 function changeVideo(roomnum, videoId) {
     console.log("change video to " + videoId);
-    if (videoId == null) {
-        console.log("User entered an invalid video url :(");
-    } else {
-        var time = getTime();
-        console.log("The time is this man: " + time);
-        socket.emit('changeVideoServer', {
-            room: roomnum,
-            videoId: videoId,
-            time: time
-        });
-    }
+    var time = getTime();
+    console.log("The time is this man: " + time);
+    socket.emit('changeVideoServer', {
+        room: roomnum,
+        videoId: videoId,
+        time: time
+    });
 }
 
 socket.on('getData', data => {
@@ -42,9 +38,19 @@ socket.on('getData', data => {
 });
 
 socket.on('changeVideoClient', data => {
+    console.log("video id is: " + videoId);
     var videoId = data.videoId;
     id = videoId;
-    console.log("video id is: " + videoId);
 
-    jwplayerLoadVideo(videoId);
+    var pathname = window.location.href.match(parseUrlWakanim);
+
+    if (pathname != null && pathname[2] === videoId)
+        return;
+
+    document.dispatchEvent(new CustomEvent('changeVideoClient', {
+        detail: JSON.stringify({
+            videoId: videoId,
+            location: pathname[1] ? pathname[1] : "fr"
+        })
+    }));
 });

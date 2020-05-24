@@ -141,6 +141,8 @@ io.on('connection', socket => {
             return;
 
         room.currVideo = data.videoId;
+        if (room.currVideo == null)
+            return;
         socket.broadcast.to("room-" + socket.roomnum).emit('changeVideoClient', {
             videoId: room.currVideo
         });
@@ -162,6 +164,8 @@ io.on('connection', socket => {
             time: currTime,
             state: room.state
         });
+        if (room.currVideo == null)
+            return;
         socket.emit('changeVideoClient', {
             videoId: room.currVideo
         });

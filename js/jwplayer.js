@@ -53,20 +53,3 @@ function setState(state) {
     else
         jwplayer().pause();
 }
-
-function jwplayerLoadVideo(videoId) {
-    console.log("changing video to: " + videoId);
-    var pathname = window.location.pathname.match(parseUrlWakanim);
-
-    if (pathname[2] === videoId)
-        return;
-
-    document.dispatchEvent(new CustomEvent('changeVideoClient', {
-        detail: JSON.stringify({
-            videoId: videoId,
-            location: pathname[1] ? pathname[1] : "fr",
-            username: username,
-            roomnum: roomnum
-        })
-    }));
-}
