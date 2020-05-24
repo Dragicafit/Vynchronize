@@ -14,11 +14,11 @@ socket.on('getData', _ => {
     socket.emit('syncClient');
 });
 
-if (typeof jwplayer !== 'undefined') {
-    socket.on('syncHost', _ => {
-        syncVideo(roomnum);
-    });
-}
+socket.on('syncHost', _ => {
+    if (typeof jwplayer !== 'undefined')
+        return;
+    syncVideo(roomnum);
+});
 
 function changeHost(roomnum) {
     if (!host) {

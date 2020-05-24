@@ -1,6 +1,6 @@
 function syncVideo(roomnum) {
-    var currTime = jwplayer().getPosition();
-    var state = jwplayer().getState() !== 'playing';
+    var currTime = getTime();
+    var state = isPause();
     var videoId = id;
     console.log("I am host and my current time is " + currTime + state);
 
@@ -10,15 +10,6 @@ function syncVideo(roomnum) {
         state: state,
         videoId: videoId
     });
-}
-
-function getTime() {
-    return typeof jwplayer === 'undefined' ? 0 : jwplayer().getPosition();
-}
-
-function seekTo(time) {
-    jwplayer().seek(currTime);
-    jwplayer().play();
 }
 
 function idParse() {

@@ -6,7 +6,7 @@ if (typeof jwplayer !== 'undefined') {
                 socket.emit('syncClient');
             return;
         }
-        currTime = jwplayer().getPosition();
+        currTime = getTime();
         seekOther(currTime, 0);
     });
 
@@ -14,7 +14,7 @@ if (typeof jwplayer !== 'undefined') {
         console.log('jwplayer pausing', e);
         if (!host)
             return;
-        currTime = jwplayer().getPosition();
+        currTime = getTime();
         seekOther(currTime, 1);
     });
 
@@ -27,8 +27,31 @@ if (typeof jwplayer !== 'undefined') {
     });
 }
 
+function getTime() {
+    if (typeof jwplayer !== 'undefined')
+        return 0;
+    return jwplayer().getPosition();
+}
+
 function isPause() {
+    if (typeof jwplayer !== 'undefined')
+        return false;
     return jwplayer().getState() !== 'playing';
+}
+
+function seekTo(time) {
+    if (typeof jwplayer !== 'undefined')
+        return;
+    jwplayer().seek(time);
+}
+
+function setState(pause) {
+    if (typeof jwplayer !== 'undefined')
+        return;
+    if (pause)
+        jwplayer().pause();
+    else
+        jwplayer().play();
 }
 
 function jwplayerLoadVideo(videoId) {
