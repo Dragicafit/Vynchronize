@@ -97,7 +97,7 @@ io.on('connection', socket => {
                 console.log("call the damn host " + room.hostName);
 
                 setTimeout(_ => {
-                    socket.broadcast.to(room.host).emit('getData');
+                    socket.emit('getData');
                 }, 1000);
 
                 if (!room.users.includes(socket.username))

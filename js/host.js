@@ -9,11 +9,6 @@ socket.on('unSetHost', _ => {
     host = false;
 });
 
-socket.on('getData', _ => {
-    console.log("Hi im the host, you called?");
-    socket.emit('syncClient');
-});
-
 socket.on('syncHost', _ => {
     syncVideo(roomnum);
 });

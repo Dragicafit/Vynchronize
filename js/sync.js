@@ -32,7 +32,7 @@ function changeVideo(roomnum, videoId) {
     });
 }
 
-socket.on('getData', data => {
+socket.on('getData', _ => {
     console.log("Hi im the host, you called?");
     socket.emit('syncClient');
 });
