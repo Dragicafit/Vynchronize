@@ -1,5 +1,3 @@
-var host = false;
-
 socket.on('setHost', _ => {
     console.log("You are the new host!");
     host = true;

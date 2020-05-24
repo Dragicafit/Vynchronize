@@ -33,15 +33,15 @@ if (typeof jwplayer !== 'undefined') {
 
 function jwplayerLoadVideo(videoId) {
     console.log("changing video to: " + videoId);
-    var pathname = window.location.pathname.split("/");
+    var pathname = window.location.pathname.match(parseUrlWakanim);
 
-    if (pathname.length > 5 && pathname[5] == videoId)
+    if (pathname[2] == videoId)
         return;
 
     document.dispatchEvent(new CustomEvent('changeVideoClient', {
         detail: JSON.stringify({
             videoId: videoId,
-            location: pathname.length > 0 ? pathname[1] : "fr",
+            location: pathname[1] ? pathname[1] : "fr",
             username: username,
             roomnum: roomnum
         })

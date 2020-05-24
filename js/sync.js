@@ -21,33 +21,17 @@ function seekTo(time) {
     jwplayer().play();
 }
 
-function idParse(videoId) {
-    if (videoId.includes("https://") || videoId.includes("http://") || videoId.includes(".com/")) {
-        var myRegex = /.+episode\/([0-9]+)/g;
-        var match = myRegex.exec(videoId);
-        if (match != null) {
-            console.log("You entered a link, but you really meant " + match[1]);
-            return match[1];
-        }
-        videoId = "invalid";
-    }
-    return videoId;
+function idParse() {
+    var pathname = window.location.pathname.match(parseUrlWakanim);
+    return pathname[2];
 }
 
 function changeVideoParse(roomnum) {
-    console.log("change video to " + roomnum);
-    var pathname = window.location.pathname.split("/");
-
-    if (pathname.length <= 5)
-        return;
-
-    var videoId = pathname[5];
-    changeVideo(roomnum, videoId);
+    changeVideo(roomnum, idParse());
 }
 
-function changeVideo(roomnum, rawId) {
-    var videoId = idParse(rawId);
-
+function changeVideo(roomnum, videoId) {
+    console.log("change video to " + videoId);
     if (videoId != "invalid") {
         var time = getTime();
         console.log("The time is this man: " + time);
@@ -60,14 +44,6 @@ function changeVideo(roomnum, rawId) {
         console.log("User entered an invalid video url :(");
         invalidURL();
     }
-}
-
-function changeVideoId(roomnum, id) {
-    document.getElementById("inputVideoId").innerHTML = id;
-    socket.emit('changeVideoServer', {
-        room: roomnum,
-        videoId: id
-    });
 }
 
 socket.on('getData', data => {
