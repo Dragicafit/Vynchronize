@@ -7,7 +7,7 @@ if (typeof jwplayer !== 'undefined') {
             return;
         }
         currTime = getTime();
-        seekOther(currTime, 0);
+        seekOther(currTime, isPlay());
     });
 
     jwplayer().on('pause', e => {
@@ -15,7 +15,7 @@ if (typeof jwplayer !== 'undefined') {
         if (!host)
             return;
         currTime = getTime();
-        seekOther(currTime, 1);
+        seekOther(currTime, isPlay());
     });
 
     jwplayer().on('seek', e => {

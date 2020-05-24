@@ -11,14 +11,13 @@ socket.on('changeStateClient', data => {
     var clientTime = getTime();
     var clientState = isPlay();
 
-    console.log("current time is: " + currTime);
-    console.log("current state is: " + state);
+    console.log("current time is: " + clientTime);
+    console.log("current time server is: " + currTime);
+    console.log("current state is: " + clientState);
+    console.log("current state server is: " + state);
 
-    if (clientTime < currTime - .2 || clientTime > currTime + .2) {
-        seekTo(currTime);
-    }
-
-    if (clientState === state)
-        return;
     setState(state);
+
+    if (clientTime < currTime - .2 || clientTime > currTime + .2)
+        seekTo(currTime);
 });
