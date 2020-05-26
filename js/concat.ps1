@@ -5,8 +5,6 @@ cat "declare.js" >> script.js
 echo "" >> script.js
 cat "sync.js" >> script.js
 echo "" >> script.js
-cat "player.js" >> script.js
-echo "" >> script.js
 cat "host.js" >> script.js
 echo "" >> script.js
 cat "events.js" >> script.js
