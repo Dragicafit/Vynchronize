@@ -6,9 +6,11 @@ This extension allows you to enjoy your favorite anime on Wakanim with your frie
 
 Connect to [the server](https://54.38.185.173:3000) and accept the public key certificate.
 
-- Firefox: Download the [xpi release](https://github.com/Dragicafit/Wakanim-With-Friends/releases/download/v0.2-beta/Wakanim-With-Friends.xpi), go to about:debugging#/runtime/this-firefox, click on Load Temporay Add-on... and select the xpi file.
+- Firefox: Download the [xpi release](https://github.com/Dragicafit/Wakanim-With-Friends/releases/download/v0.2-beta/Wakanim-With-Friends.xpi), go to `about:debugging#/runtime/this-firefox`, click on `Load Temporay Add-on...` and select the xpi file.
 
-- Chrome: Download the [crx release](https://github.com/Dragicafit/Wakanim-With-Friends/releases/download/v0.2-beta/Wakanim-With-Friends.crx), change the extension to zip, unzip, go to chrome://extensions, enable debugging, click on Load unpacked and select the unziped folder.
+- Chromium: Download the [crx release](https://github.com/Dragicafit/Wakanim-With-Friends/releases/download/v0.2-beta/Wakanim-With-Friends.crx), go to `chrome://extensions`, enable debugging, drag and drop the crx file.
+
+- Chrome: Download the [crx release](https://github.com/Dragicafit/Wakanim-With-Friends/releases/download/v0.2-beta/Wakanim-With-Friends.crx), extract the crx file using 7zip, go to `chrome://extensions`, enable debugging, click on `Load unpacked` and select the extracted folder.
 
 ## Developing or debugging
 
@@ -30,6 +32,6 @@ $ ./script
 ```
 Finaly load the extension in your browser:
 
-- Firefox: Go to about:debugging#/runtime/this-firefox, click on Load Temporay Add-on... and select the folder.
+- Firefox: Go to `about:debugging#/runtime/this-firefox`, click on `Load Temporay Add-on...` and select the folder.
 
-- Chrome: Go to chrome://extensions, enable debugging, click on Load Unpacked and select the folder.
+- Chrome: Go to `chrome://extensions`, enable debugging, click on `Load Unpacked` and select the folder.

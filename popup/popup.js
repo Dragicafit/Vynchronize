@@ -32,8 +32,8 @@ function chat() {
             }
         }
 
-        $username.on("input", _ => check(regexUsername));
-        $roomnum.on("input", _ => check(regexRoom));
+        $username.on("input", function () { check.call(this, regexUsername); });
+        $roomnum.on("input", function () { check.call(this, regexRoom); });
 
         $userForm.submit((e) => {
             e.preventDefault();
