@@ -163,10 +163,11 @@ io.on('connection', socket => {
         if (socket.id === room.host)
             return;
 
+        var currTime = room.currTime;
         if (room.state)
-            room.currTime += (performance.now() - room.lastChange) / 1000;
+            currTime += (performance.now() - room.lastChange) / 1000;
         socket.emit('changeStateClient', {
-            time: room.currTime,
+            time: currTime,
             state: room.state
         });
         if (room.currVideo == null)
