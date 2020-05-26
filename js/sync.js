@@ -11,9 +11,15 @@ function syncVideo(roomnum) {
     });
 }
 
-function idParse() {
+function parseUrl() {
     var pathname = window.location.href.match(parseUrlWakanim);
-    return pathname != null ? Number.parseInt(pathname[2], 10) : null;
+    if (pathname == null)
+        return { location: "fr" };
+    return { videoId: Number.parseInt(pathname[2], 10), location: pathname[1] };
+}
+
+function idParse() {
+    return parseUrl().videoId;
 }
 
 function changeVideoParse(roomnum) {
@@ -41,15 +47,15 @@ socket.on('changeVideoClient', data => {
     console.log("video id is: " + data.videoId);
     id = data.videoId;
 
-    var pathname = window.location.href.match(parseUrlWakanim);
+    var url = parseUrl();
 
-    if (pathname != null && pathname[2] === data.videoId)
+    if (url.videoId === data.videoId)
         return;
 
     document.dispatchEvent(new CustomEvent('changeVideoClient', {
         detail: JSON.stringify({
             videoId: data.videoId,
-            location: pathname[1] ? pathname[1] : "fr"
+            location: url.location
         })
     }));
 });
