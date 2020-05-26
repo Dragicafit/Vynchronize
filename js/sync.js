@@ -13,7 +13,7 @@ function syncVideo(roomnum) {
 
 function idParse() {
     var pathname = window.location.href.match(parseUrlWakanim);
-    return pathname != null ? pathname[2] : null;
+    return pathname != null ? Number.parseInt(pathname[2], 10) : null;
 }
 
 function changeVideoParse(roomnum) {

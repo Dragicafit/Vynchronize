@@ -6,24 +6,21 @@ if (typeof jwplayer !== 'undefined') {
                 socket.emit('syncClient');
             return;
         }
-        currTime = getTime();
-        seekOther(currTime, isPlay());
+        seekOther(getTime(), true);
     });
 
     jwplayer().on('pause', e => {
         console.log('jwplayer pausing', e);
         if (!host)
             return;
-        currTime = getTime();
-        seekOther(currTime, isPlay());
+        seekOther(getTime(), false);
     });
 
     jwplayer().on('seek', e => {
         console.log('jwplayer seeking', e);
         if (!host)
             return;
-        currTime = e.offset;
-        seekOther(currTime, isPlay());
+        seekOther(e.offset, isPlay());
     });
 }
 

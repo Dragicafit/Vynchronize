@@ -12,7 +12,8 @@ const port = process.env.PORT || 3000;
 var users = [];
 var connections = 0;
 var userrooms = {};
-var nosymbols = /^[\w-]{5,30}$/;
+var regexUsername = /^[\w-]{5,30}$/;
+var regexRoom = /^[\w-]{1,30}$/;
 
 process.title = 'WakanimWithFriends';
 
@@ -52,11 +53,11 @@ io.on('connection', socket => {
     socket.on('joinRoom', (data, callback) => {
         console.log("Join room");
 
-        if (typeof data.roomnum !== 'string' || !nosymbols.test(data.roomnum))
+        if (typeof data.roomnum !== 'string' || !regexRoom.test(data.roomnum))
             return callback();
 
         if (socket.username == null) {
-            if (typeof data.username !== 'string' || !nosymbols.test(data.username))
+            if (typeof data.username !== 'string' || !regexUsername.test(data.username))
                 return callback();
             socket.username = data.username;
             if (!users.includes(socket.username))
@@ -113,6 +114,10 @@ io.on('connection', socket => {
     });
 
     socket.on('changeStateServer', data => {
+        if (typeof data.state !== "boolean")
+            return;
+        if (!Number.isFinite(data.time))
+            return;
         if (socket.roomnum == null)
             return;
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
@@ -131,6 +136,8 @@ io.on('connection', socket => {
     });
 
     socket.on('changeVideoServer', data => {
+        if (!Number.isSafeInteger(data.videoId))
+            return;
         if (socket.roomnum == null)
             return;
         var room = io.sockets.adapter.rooms['room-' + socket.roomnum];

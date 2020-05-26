@@ -1,6 +1,7 @@
 var roomnum = "";
 var tab;
-var nosymbols = /^[\w-]{5,30}$/;
+var regexUsername = /^[\w-]{5,30}$/;
+var regexRoom = /^[\w-]{1,30}$/;
 
 function chat() {
     $(function () {
@@ -8,7 +9,7 @@ function chat() {
         var $username = $('#username');
         var $roomnum = $('#roomnum');
 
-        function check() {
+        function check(nosymbols) {
             this.setCustomValidity('');
 
             var value = $(this).val();
@@ -31,8 +32,8 @@ function chat() {
             }
         }
 
-        $username.on("input", check);
-        $roomnum.on("input", check);
+        $username.on("input", _ => check(regexUsername));
+        $roomnum.on("input", _ => check(regexRoom));
 
         $userForm.submit((e) => {
             e.preventDefault();
@@ -40,11 +41,11 @@ function chat() {
             var newUser = $username.val();
             var newRoom = $roomnum.val();
 
-            if (!nosymbols.test(newUser)) {
+            if (!regexUsername.test(newUser)) {
                 console.log("ENTER A PROPER NAME");
                 return;
             }
-            if (!nosymbols.test(newRoom)) {
+            if (!regexRoom.test(newRoom)) {
                 console.log("ENTER A PROPER ROOM");
                 return;
             }
