@@ -84,7 +84,7 @@ io.on('connection', socket => {
                 });
             }
             if (init) {
-                room.currVideo = '11396';
+                room.currVideo = null;
                 room.users = [socket.username];
                 room.state = false;
                 room.currTime = 0;
