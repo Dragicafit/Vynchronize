@@ -1,48 +1,52 @@
 if (typeof jwplayer !== 'undefined') {
-    jwplayer().on('play', function (e) {
+    jwplayer().on('play', e => {
         console.log('jwplayer playing', e);
-        if (host) {
-            currTime = jwplayer().getPosition();
-            seekOther(roomnum, currTime);
-            playOther(roomnum);
-        }
-        else {
+        if (!host) {
             if (e.playReason === "interaction" && e.reason === "playing")
-                socket.emit('sync host', {});
+                socket.emit('syncClient');
+            return;
         }
+        seekOther(getTime(), true);
     });
 
-    jwplayer().on('pause', function (e) {
+    jwplayer().on('pause', e => {
         console.log('jwplayer pausing', e);
-        if (host) {
-            currTime = jwplayer().getPosition();
-            seekOther(roomnum, currTime);
-            pauseOther(roomnum);
-        }
+        if (!host)
+            return;
+        seekOther(getTime(), false);
     });
 
-    jwplayer().on('seek', function (e) {
+    jwplayer().on('seek', e => {
         console.log('jwplayer seeking', e);
-        if (host) {
-            currTime = e.offset;
-            seekOther(roomnum, currTime);
-        }
+        if (!host)
+            return;
+        seekOther(e.offset, isPlay());
     });
 }
 
-function jwplayerLoadVideo(videoId) {
-    console.log("changing video to: " + videoId);
-    var pathname = window.location.pathname.split("/");
+function getTime() {
+    if (typeof jwplayer === 'undefined')
+        return 0;
+    return jwplayer().getPosition();
+}
 
-    if (pathname.length > 5 && pathname[5] == videoId)
+function isPlay() {
+    if (typeof jwplayer === 'undefined')
+        return false;
+    return jwplayer().getState() === 'playing';
+}
+
+function seekTo(time) {
+    if (typeof jwplayer === 'undefined')
         return;
+    jwplayer().seek(time);
+}
 
-    document.dispatchEvent(new CustomEvent('changeVideoClient', {
-        detail: JSON.stringify({
-            videoId: videoId,
-            location: pathname.length > 0 ? pathname[1] : "fr",
-            username: username,
-            roomnum: roomnum
-        })
-    }));
+function setState(state) {
+    if (typeof jwplayer === 'undefined')
+        return;
+    if (state)
+        jwplayer().play();
+    else
+        jwplayer().pause();
 }

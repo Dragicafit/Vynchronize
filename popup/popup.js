@@ -1,55 +1,63 @@
 var roomnum = "";
 var tab;
-var nosymbols = /^[\w-]+$/;
+var regexUsername = /^[\w-]{5,30}$/;
+var regexRoom = /^[\w-]{1,30}$/;
 
 function chat() {
     $(function () {
-        var $roomArea = $('#roomArea');
-        var $userFormArea = $('#userFormArea');
         var $userForm = $('#userForm');
         var $username = $('#username');
         var $roomnum = $('#roomnum');
 
-        $userForm.submit(function (e) {
+        function check(nosymbols) {
+            this.setCustomValidity('');
+
+            var value = $(this).val();
+
+            if (value === "") {
+                this.setCustomValidity('Enter a value');
+                return;
+            }
+            if (value.length > 30) {
+                this.setCustomValidity("30 characters max");
+                return;
+            }
+            if (value.length < 5) {
+                this.setCustomValidity("5 characters min");
+                return;
+            }
+            if (!nosymbols.test(value)) {
+                this.setCustomValidity("0-9, a-Z and - only");
+                return;
+            }
+        }
+
+        $username.on("input", _ => check(regexUsername));
+        $roomnum.on("input", _ => check(regexRoom));
+
+        $userForm.submit((e) => {
             e.preventDefault();
-            if ($username.val() == "") {
-                console.log("ENTER A NAME");
-                var noname = document.getElementById('missinginfo');
-                noname.innerHTML = "Surely you have a name right? Enter it below!";
+
+            var newUser = $username.val();
+            var newRoom = $roomnum.val();
+
+            if (!regexUsername.test(newUser)) {
+                console.log("ENTER A PROPER NAME");
+                return;
             }
-            else if ($username.val().length > 30) {
-                console.log("NAME IS TOO LONG");
-                var noname = document.getElementById('missinginfo');
-                noname.innerHTML = "Your name can't possibly be over 30 characters!";
+            if (!regexRoom.test(newRoom)) {
+                console.log("ENTER A PROPER ROOM");
+                return;
             }
-            else if ($roomnum.val().length > 50) {
-                console.log("ROOM NAME IS TOO LONG");
-                var noname = document.getElementById('missinginfo');
-                noname.innerHTML = "How are you going to remember a room code that has more than 50 characters?";
-            }
-            else if (!nosymbols.test($roomnum.val())) {
-                console.log("ENTER A PROPER ROOMNUMBER");
-                var noname = document.getElementById('missinginfo');
-                noname.innerHTML = "";
-                var noname2 = document.getElementById('missinginfo2');
-                noname2.innerHTML = "Please enter a room ID without symbols or leading/trailing whitespace!";
-            } else {
-                chrome.tabs.sendMessage(tab,
-                    {
-                        command: 'new user',
-                        username: $username.val(),
-                    });
-                chrome.tabs.sendMessage(tab,
-                    {
-                        command: 'new room',
-                        roomnum: $roomnum.val()
-                    });
-                $username.val('');
-            }
+            chrome.tabs.sendMessage(tab, {
+                command: 'joinRoom',
+                roomnum: newRoom,
+                username: newUser
+            });
         });
 
         chrome.runtime.onMessage.addListener(message => {
-            if (message.command == 'send info') {
+            if (message.command === 'send info') {
                 console.log("get info");
 
                 if (message.username) {
@@ -81,7 +89,7 @@ function reportError(error) {
 }
 
 var listener = message => {
-    if (message.command == 'scipt loaded') {
+    if (message.command === 'scipt loaded') {
         console.log("scipt loaded");
         chrome.runtime.onMessage.removeListener(listener);
         chat();
@@ -94,7 +102,7 @@ chrome.tabs.query({
     active: true,
     url: "*://*.wakanim.tv/*"
 }, tabs => {
-    if (tabs.length == 0) {
+    if (tabs.length === 0) {
         chrome.tabs.create({ url: "https://www.wakanim.tv/" }, injectScript);
     } else {
         injectScript(tabs[0]);
