@@ -52,10 +52,10 @@ socket.on('changeVideoClient', data => {
     if (url.videoId === data.videoId)
         return;
 
-    document.dispatchEvent(new CustomEvent('changeVideoClient', {
-        detail: JSON.stringify({
-            videoId: data.videoId,
-            location: url.location
-        })
-    }));
+    window.postMessage({
+        direction: "from-script-WWF",
+        command: 'changeVideoClient',
+        videoId: data.videoId,
+        location: url.location
+    }, "*");
 });

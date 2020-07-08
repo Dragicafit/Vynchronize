@@ -9,16 +9,14 @@
     window.hasRun = true;
 
     browser.runtime.onMessage.addListener(message => {
-        document.dispatchEvent(new CustomEvent(message.command, { detail: JSON.stringify(message) }));
+        message.direction = "from-content-WWF";
+        window.postMessage(message, "https://www.wakanim.tv");
     });
 
-    var redirects = ['send info', 'changeVideoClient'];
-    redirects.forEach(redirect => {
-        document.addEventListener(redirect, e => {
-            var data = JSON.parse(e.detail);
-            data.command = redirect;
-            browser.runtime.sendMessage(data);
-        });
+    window.addEventListener("message", event => {
+        if (event.source !== window || !event.data || event.data.direction !== "from-script-WWF")
+            return;
+        browser.runtime.sendMessage(event.data);
     });
 
     var s = document.createElement('script');
