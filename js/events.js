@@ -6,7 +6,7 @@ function seekOther(currTime, state) {
 }
 
 socket.on('changeStateClient', data => {
-    var clientTime = getTime();
+    let clientTime = getTime();
 
     console.log("current time is: " + clientTime);
     console.log("current time server is: " + data.time);

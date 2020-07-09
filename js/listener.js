@@ -19,7 +19,7 @@
         browser.runtime.sendMessage(event.data);
     });
 
-    var s = document.createElement('script');
+    let s = document.createElement('script');
     s.src = browser.runtime.getURL('/js/script.js');
     s.onload = function () {
         this.remove();

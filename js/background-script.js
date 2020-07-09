@@ -1,10 +1,10 @@
-var roomsTabs = {};
+let roomsTabs = {};
 
 browser.runtime.onMessage.addListener((message, sender) => {
+    let tabId = sender.tab.id;
     if (message.command === 'changeVideoClient') {
         console.log("change video client");
 
-        var tabId = sender.tab.id;
         if (roomsTabs[tabId] == null)
             return;
 
@@ -16,7 +16,6 @@ browser.runtime.onMessage.addListener((message, sender) => {
     } else if (message.command === 'send info') {
         console.log("get info");
 
-        var tabId = sender.tab.id;
         if (message.username)
             browser.storage.local.set({ username: message.username });
         if (message.roomnum)
@@ -36,7 +35,7 @@ function sendInfo(tabId) {
 }
 
 function insertScript(tabId) {
-    var listener = message => {
+    let listener = message => {
         if (message.command !== 'scipt loaded')
             return;
         console.log("scipt loaded");

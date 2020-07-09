@@ -1,18 +1,18 @@
-var roomnum = "";
-var tab;
-var regexUsername = /^[\w-]{5,30}$/;
-var regexRoom = /^[\w-]{1,30}$/;
+let roomnum = "";
+let tab;
+let regexUsername = /^[\w-]{5,30}$/;
+let regexRoom = /^[\w-]{1,30}$/;
 
 function chat() {
     $(function () {
-        var $userForm = $('#userForm');
-        var $username = $('#username');
-        var $roomnum = $('#roomnum');
+        let $userForm = $('#userForm');
+        let $username = $('#username');
+        let $roomnum = $('#roomnum');
 
         function check(nosymbols) {
             this.setCustomValidity('');
 
-            var value = $(this).val();
+            let value = $(this).val();
 
             if (value === "") {
                 this.setCustomValidity('Enter a value');
@@ -38,8 +38,8 @@ function chat() {
         $userForm.submit((e) => {
             e.preventDefault();
 
-            var newUser = $username.val();
-            var newRoom = $roomnum.val();
+            let newUser = $username.val();
+            let newRoom = $roomnum.val();
 
             if (!regexUsername.test(newUser)) {
                 console.log("ENTER A PROPER NAME");
@@ -88,7 +88,7 @@ function reportError(error) {
     console.error(`Could not beastify: ${error}`);
 }
 
-var listener = message => {
+let listener = message => {
     if (message.command === 'scipt loaded') {
         console.log("scipt loaded");
         browser.runtime.onMessage.removeListener(listener);

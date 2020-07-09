@@ -9,11 +9,11 @@ const io = require('socket.io')(server);
 const performance = require('perf_hooks').performance;
 const port = process.env.PORT || 3000;
 
-var users = [];
-var connections = 0;
-var userrooms = {};
-var regexUsername = /^[\w-]{5,30}$/;
-var regexRoom = /^[\w-]{1,30}$/;
+let users = [];
+let connections = 0;
+let userrooms = {};
+let regexUsername = /^[\w-]{5,30}$/;
+let regexRoom = /^[\w-]{1,30}$/;
 
 process.title = 'WakanimWithFriends';
 
@@ -34,8 +34,8 @@ io.on('connection', socket => {
             users.splice(index, 1);
         }
 
-        var roomnum = userrooms[socket.id];
-        var room = io.sockets.adapter.rooms['room-' + roomnum];
+        let roomnum = userrooms[socket.id];
+        let room = io.sockets.adapter.rooms['room-' + roomnum];
 
         if (room != null) {
             if (socket.id === room.host) {
@@ -67,14 +67,14 @@ io.on('connection', socket => {
         socket.roomnum = data.roomnum;
         userrooms[socket.id] = socket.roomnum;
 
-        var init = io.sockets.adapter.rooms['room-' + socket.roomnum] == null;
+        let init = io.sockets.adapter.rooms['room-' + socket.roomnum] == null;
 
         socket.join("room-" + socket.roomnum, err => {
             if (err)
                 return console.error("join fail");
             console.log(socket.username + " connected to room-" + socket.roomnum);
 
-            var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
+            let room = io.sockets.adapter.rooms['room-' + socket.roomnum];
             if (room.host == null) {
                 room.host = socket.id;
                 room.hostName = socket.username;
@@ -120,7 +120,7 @@ io.on('connection', socket => {
             return;
         if (socket.roomnum == null)
             return;
-        var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
+        let room = io.sockets.adapter.rooms['room-' + socket.roomnum];
         if (room == null)
             return;
         if (socket.id !== room.host)
@@ -140,7 +140,7 @@ io.on('connection', socket => {
             return;
         if (socket.roomnum == null)
             return;
-        var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
+        let room = io.sockets.adapter.rooms['room-' + socket.roomnum];
         if (room == null)
             return;
         if (socket.id !== room.host)
@@ -157,13 +157,13 @@ io.on('connection', socket => {
     socket.on('syncClient', _ => {
         if (socket.roomnum == null)
             return;
-        var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
+        let room = io.sockets.adapter.rooms['room-' + socket.roomnum];
         if (room == null)
             return;
         if (socket.id === room.host)
             return;
 
-        var currTime = room.currTime;
+        let currTime = room.currTime;
         if (room.state)
             currTime += (performance.now() - room.lastChange) / 1000;
         socket.emit('changeStateClient', {
@@ -180,15 +180,15 @@ io.on('connection', socket => {
     /*socket.on('change host', data=> {
         if (socket.roomnum == null)
             return;
-        var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
+        let room = io.sockets.adapter.rooms['room-' + socket.roomnum];
         if (room == null)
            return;
         if (socket.id !== room.host)
             return;
     
         console.log(io.sockets.adapter.rooms['room-' + socket.roomnum]);
-        var newHost = socket.id;
-        var currHost = io.sockets.adapter.rooms['room-' + socket.roomnum].host;
+        let newHost = socket.id;
+        let currHost = io.sockets.adapter.rooms['room-' + socket.roomnum].host;
     
         if (newHost !== currHost) {
             console.log("I want to be the host and my socket id is: " + newHost);
@@ -208,7 +208,7 @@ io.on('connection', socket => {
     function updateRoomUsers() {
         if (socket.roomnum == null)
             return;
-        var room = io.sockets.adapter.rooms['room-' + socket.roomnum];
+        let room = io.sockets.adapter.rooms['room-' + socket.roomnum];
         if (room == null)
             return;
 
